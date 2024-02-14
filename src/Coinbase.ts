@@ -3,21 +3,38 @@ import {WebSocketClient} from './client/WebSocketClient';
 import {RequestSetup, RequestSigner, SignedRequest} from './auth/RequestSigner';
 
 export interface ClientAuthenticationBase {
-  apiKey: string;
-  apiSecret: string;
+  /** Legacy API Keys */
+  apiKey?: string | undefined | null;
+  apiSecret?: string | undefined | null;
+  /** Cloud Trading API Keys */
+  ctApiKeyName?: string | undefined | null;
+  ctApiSecret?: string | undefined | null;
+  /** defaults to retail_rest_api_proxy if not defined when using ctApiKey */
+  ctServiceNameApi?: string | undefined | null;
+  /** defaults to public_websocket_api if not defined when using ctApiKey */
+  ctServiceNameWs?: string | undefined | null;
+  /** OAuth */
   oauthToken?: string | undefined | null;
 }
 
 export interface ClientAuthenticationBaseUrls extends ClientAuthenticationBase {
-  apiKey: string;
-  apiSecret: string;
+  apiKey?: string | undefined | null;
+  apiSecret?: string | undefined | null;
+  ctApiKeyName?: string | undefined | null;
+  ctApiSecret?: string | undefined | null;
+  ctServiceNameApi?: string | undefined | null;
+  ctServiceNameWs?: string | undefined | null;
   oauthToken?: string | undefined | null;
 }
 
 export interface ClientAuthenticationCustomUrls extends ClientAuthenticationBase {
   advTradeHttpUrl: string;
-  apiKey: string;
-  apiSecret: string;
+  apiKey?: string | undefined | null;
+  apiSecret?: string | undefined | null;
+  ctApiKeyName?: string | undefined | null;
+  ctApiSecret?: string | undefined | null;
+  ctServiceNameApi?: string | undefined | null;
+  ctServiceNameWs?: string | undefined | null;
   oauthToken?: string | undefined | null;
   siwcHttpUrl: string;
   wsUrl: string;
@@ -50,8 +67,10 @@ export class Coinbase {
 
   constructor(
     auth: ClientAuthentication = {
-      apiKey: '',
-      apiSecret: '',
+      apiKey: undefined,
+      apiSecret: undefined,
+      ctApiKeyName: undefined,
+      ctApiSecret: undefined,
       oauthToken: undefined,
     }
   ) {

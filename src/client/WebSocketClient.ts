@@ -470,28 +470,36 @@ export class WebSocketClient extends EventEmitter {
       ws: true,
     });
 
-    if (message.channel === WebSocketChannelName.USER) {
-      if (!this.userID && signature.key) {
-        const user = await this.restClient.user.fetchUserInfo().catch(() => {
-          return null;
-        });
-        this.userID = user?.id;
+    if (!signature.jwt) {
+      if (message.channel === WebSocketChannelName.USER) {
+        if (!this.userID && signature.key) {
+          const user = await this.restClient.user.fetchUserInfo().catch(() => {
+            return null;
+          });
+          this.userID = user?.id;
+        }
+        Object.assign(signature, {user_id: this.userID});
       }
-      Object.assign(signature, {user_id: this.userID});
+
+      // i really don't like that REST needs int and WS needs string
+      (signature as any).timestamp = signature.timestamp.toString();
+      if (signature?.key) {
+        Object.assign(signature, {
+          api_key: signature.key.toString(),
+        });
+        delete (signature as any).key;
+        if (signature.oauth) {
+          delete (signature as any).signature;
+        }
+      }
+      Object.assign(message, signature);
+    } else {
+      Object.assign(message, {
+        jwt: signature.key,
+        timestamp: signature.timestamp,
+      });
     }
 
-    // i really don't like that REST needs int and WS needs string
-    (signature as any).timestamp = signature.timestamp.toString();
-    if (signature?.key) {
-      Object.assign(signature, {
-        api_key: signature.key.toString(),
-      });
-      delete (signature as any).key;
-      if (signature.oauth) {
-        delete (signature as any).signature;
-      }
-    }
-    Object.assign(message, signature);
 
     if (!this.socket) {
       throw new Error(`Failed to send message of type "${message.type}": You need to connect to the WebSocket first.`);

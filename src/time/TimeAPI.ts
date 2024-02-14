@@ -29,7 +29,7 @@ export class TimeAPI {
       config.headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-      };
+      } as any;
       return config;
     });
     const response = await client.get<any>(`${this.baseURL}${TimeAPI.URL.TIME}`, {});

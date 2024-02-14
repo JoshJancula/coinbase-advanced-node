@@ -115,23 +115,30 @@ export class RESTClient extends EventEmitter {
       }
 
       const signedRequest = await this.signRequest({
+        baseUrl: config.baseURL,
         httpMethod: String(config.method).toUpperCase(),
         payload: RESTClient.stringifyPayload(config, config.baseURL.includes('v3')),
         requestPath,
       });
 
-      if (signedRequest.oauth) {
+      if (signedRequest.jwt && config.baseURL.includes('v2')) {
+        throw new Error(
+          `Requests to the SIWC API with Cloud API keys are not supported https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth`
+        );
+      }
+
+      if (signedRequest.oauth || signedRequest.jwt) {
         config.headers = {
           ...config.headers,
           Authorization: `Bearer ${signedRequest.key}`,
           'CB-ACCESS-TIMESTAMP': `${signedRequest.timestamp}`,
-        };
+        } as any;
       } else {
         config.headers = {
           ...config.headers,
           'CB-ACCESS-TIMESTAMP': `${signedRequest.timestamp}`,
-        };
-        if (signedRequest.key !== '') {
+        } as any;
+        if (signedRequest.key) {
           config.headers['CB-ACCESS-SIGN'] = signedRequest.signature;
           config.headers['CB-ACCESS-KEY'] = signedRequest.key;
         }
