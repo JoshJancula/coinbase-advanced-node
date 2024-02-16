@@ -500,7 +500,6 @@ export class WebSocketClient extends EventEmitter {
       });
     }
 
-
     if (!this.socket) {
       throw new Error(`Failed to send message of type "${message.type}": You need to connect to the WebSocket first.`);
     }

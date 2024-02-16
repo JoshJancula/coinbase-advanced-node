@@ -28,6 +28,7 @@ import {DepositAPI} from '../deposit';
 import {AddressAPI} from '../addresses';
 import {BuyAPI} from '../buy';
 import {SellAPI} from '../sell';
+import {PortfolioAPI} from '../portfolios';
 
 export interface RESTClient {
   on(
@@ -64,6 +65,7 @@ export class RESTClient extends EventEmitter {
   readonly transaction: TransactionAPI;
   readonly user: UserAPI;
   readonly withdraw: WithdrawAPI;
+  readonly portfolios: PortfolioAPI;
 
   private readonly httpClient: AxiosInstance;
   private readonly logger: DebugLogger;
@@ -166,6 +168,7 @@ export class RESTClient extends EventEmitter {
     this.transaction = new TransactionAPI(this.httpClient);
     this.user = new UserAPI(this.httpClient);
     this.withdraw = new WithdrawAPI(this.httpClient);
+    this.portfolios = new PortfolioAPI(this.httpClient);
   }
 
   static stringifyPayload(config: AxiosRequestConfig, excludeParams?: boolean): string {

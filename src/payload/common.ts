@@ -36,10 +36,12 @@ export interface PaginatedData<PayloadType> {
   pagination: {after?: string; before?: string; has_next?: boolean};
 }
 
-export interface TransactionAmount {
+export interface Balance {
   amount: string;
   currency: string;
 }
+
+export interface TransactionAmount extends Balance {};
 
 export interface OrderAmount {
   price: string;
