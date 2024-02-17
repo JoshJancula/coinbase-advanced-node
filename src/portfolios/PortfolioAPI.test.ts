@@ -5,18 +5,20 @@ describe('PortfolioAPI', () => {
   afterEach(() => nock.cleanAll());
 
   describe('getPortfolios', () => {
-    it('should list of portfolios', async () => {
+    it('should list portfolios', async () => {
       nock(global.REST_URL)
         .get(`/brokerage/portfolios`)
         .query(true)
         .reply(200, (_uri: string) => {
           return JSON.stringify({
-            portfolios: {
-              deleted: 'boolean',
-              name: 'test',
-              type: PortfolioTypes.CONSUMER,
-              uuid: 'string',
-            },
+            portfolios: [
+              {
+                deleted: 'boolean',
+                name: 'test',
+                type: PortfolioTypes.CONSUMER,
+                uuid: 'string',
+              },
+            ],
           });
         });
 
@@ -34,7 +36,7 @@ describe('PortfolioAPI', () => {
         .query(true)
         .reply(200, (_uri: string) => {
           return JSON.stringify({
-            portfolios: {
+            portfolio: {
               deleted: 'boolean',
               name: 'new portfolio',
               type: PortfolioTypes.CONSUMER,
@@ -60,8 +62,8 @@ describe('PortfolioAPI', () => {
         .query(true)
         .reply(200, (_uri: string) => {
           return JSON.stringify({
-            source_portfolio_uuid: 'string',
-            target_portfolio_uuid: 'string',
+            source_portfolio_uuid,
+            target_portfolio_uuid,
           });
         });
 
@@ -270,13 +272,15 @@ describe('PortfolioAPI', () => {
   });
 
   describe('editPortfolio', () => {
+    const target_portfolio_uuid = 'yyyyyyyyy';
+
     it('should edit a portfolio', async () => {
       nock(global.REST_URL)
-        .put(`/brokerage/portfolios`)
+        .put(`/brokerage/portfolios/${target_portfolio_uuid}`)
         .query(true)
         .reply(200, (_uri: string) => {
           return JSON.stringify({
-            portfolios: {
+            portfolio: {
               deleted: 'boolean',
               name: 'new name',
               type: PortfolioTypes.CONSUMER,
@@ -285,7 +289,7 @@ describe('PortfolioAPI', () => {
           });
         });
 
-      const portfolio = await global.client.rest.portfolios.editPortfolio('xxxxxx', {name: 'new name'});
+      const portfolio = await global.client.rest.portfolios.editPortfolio(target_portfolio_uuid, {name: 'new name'});
 
       expect(portfolio).toBeDefined();
       expect(portfolio.name).toBe('new name');

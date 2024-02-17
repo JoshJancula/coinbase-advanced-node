@@ -69,8 +69,8 @@ import {Coinbase} from 'coinbase-advanced-node';
 // https://cloud.coinbase.com/access/api
 // Cloud API keys can only be used on andvance trade endpoints
 const cloudAuth = {
-  ctApiKeyName: 'organizations/{org_id}/apiKeys/{key_id}',
-  ctApiSecret: '-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIVATE KEY-----\n',
+  cloudApiKeyName: 'organizations/{org_id}/apiKeys/{key_id}',
+  cloudApiSecret: '-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIVATE KEY-----\n',
 };
 
 const cloudClient = new Coinbase(cloudAuth);

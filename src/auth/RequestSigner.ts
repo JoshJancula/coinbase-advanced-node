@@ -30,7 +30,7 @@ export class RequestSigner {
       };
     }
 
-    if (auth.ctApiKeyName) {
+    if (auth.cloudApiKeyName) {
       return {
         jwt: true,
         key: RequestSigner.buildJWT(auth, setup),
@@ -50,16 +50,16 @@ export class RequestSigner {
 
   static buildJWT(auth: ClientAuthentication, setup: RequestSetup): string {
     const {sign} = require('jsonwebtoken');
-    const key_name = auth.ctApiKeyName;
-    const key_secret = auth.ctApiSecret;
+    const key_name = auth.cloudApiKeyName;
+    const key_secret = auth.cloudApiSecret;
     const request_method = setup.httpMethod.toUpperCase();
 
     const url = setup.baseUrl?.startsWith('http') ? new URL(setup.baseUrl).hostname : '';
 
     const request_path = setup.requestPath;
     const service_name = setup.ws
-      ? auth.ctServiceNameWs || 'public_websocket_api'
-      : auth.ctServiceNameApi || 'retail_rest_api_proxy';
+      ? auth.cloudServiceNameWs || 'public_websocket_api'
+      : auth.cloudServiceNameApi || 'retail_rest_api_proxy';
 
     const algorithm = 'ES256';
     const uri = setup.ws ? undefined : request_method + ' ' + url + request_path;
