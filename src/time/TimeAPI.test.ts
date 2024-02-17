@@ -27,7 +27,7 @@ describe('TimeAPI', () => {
     });
 
     it('returns decimal seconds since Unix Epoch', async () => {
-      const time = await new TimeAPI(global.SIWC_REST_URL).getTime();
+      const time = await new TimeAPI(global.SIWC_REST_URL, undefined).getTime();
       const expected: TimeSkew = {
         epoch: 1420674445.201,
         iso: '2015-01-07T23:47:25.201Z',

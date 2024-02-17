@@ -5,10 +5,11 @@
   "dependencies": {
     "@types/node": "18.11.10",
     "@types/ws": "8.5.3",
-    "axios": "1.2.1",
+    "axios": "1.6.7",
     "axios-retry": "3.3.1",
     "buffer": "6.0.3",
     "bufferutil": "4.0.7",
+    "jsonwebtoken": "^9.0.2",
     "reconnecting-websocket": "4.4.0",
     "utf-8-validate": "5.0.10",
     "ws": "8.9.0"
@@ -50,6 +51,9 @@
   ],
   "homepage": "https://github.com/joshjancula/coinbase-advanced-node",
   "keywords": [
+    "Node",
+    "Advanced",
+    "Trade",
     "API",
     "Bitcoin",
     "Coinbase",
@@ -104,5 +108,5 @@
     "test:types": "yarn lint:types",
     "prepare": "husky install"
   },
-  "version": "2.1.0"
+  "version": "2.3.0"
 }

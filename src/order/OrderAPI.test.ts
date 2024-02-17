@@ -245,4 +245,20 @@ describe('OrderAPI', () => {
       expect(o.order_id).toEqual('8eba9e7b-08d6-4667-90ca-6db445d743c1');
     });
   });
+
+  describe('editOrder', () => {
+    it('should edit an order', async () => {
+      nock(global.REST_URL)
+        .post(`${OrderAPI.URL.ORDERS}/edit`)
+        .query(true)
+        .reply(200, JSON.stringify({success: true}));
+
+      const o = await global.client.rest.order.editOrder({
+        order_id: 'xxxxxxxxxxxx',
+        price: '10.00',
+        size: '1',
+      });
+      expect(o.success).toBe(true);
+    });
+  });
 });

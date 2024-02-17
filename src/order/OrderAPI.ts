@@ -87,9 +87,30 @@ export type OrderConfiguration = MarketOrder | LimitOrderGTC | LimitOrderGTD | S
 
 export interface NewOrder {
   client_order_id: string;
+  leverage?: string;
+  margin_type?: OrderMarginTypes;
   order_configuration: OrderConfiguration;
   product_id: string;
+  retail_portfolio_id?: string;
+  self_trade_prevention_id?: string;
   side: OrderSide;
+}
+
+export enum OrderMarginTypes {
+  CROSS = 'CROSS',
+  ISOLATED = 'ISOLATED',
+}
+export interface PreviewOrderPayload {
+  commission_rate: {
+    value: string;
+  };
+  is_max: boolean;
+  leverage: string;
+  margin_type: OrderMarginTypes;
+  order_configuration: OrderConfiguration;
+  side: OrderSide;
+  skip_fcm_risk_check: boolean;
+  tradable_balance: string;
 }
 
 export enum CancelOrderFailureReasons {
@@ -108,8 +129,11 @@ export interface CancelOrderResponse {
 
 /** @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_gethistoricalorders */
 export interface OrderListQueryParam {
+  asset_filters?: string[];
+  contract_expiry_type?: string;
   end_date?: ISO_8601_MS_UTC;
   limit?: number;
+  order_placement_source?: string;
   order_side?: OrderSide;
   /** Limit list of orders to these statuses. Passing "all" returns orders of all statuses. Default: [open, pending, active] */
   order_status?: (OrderStatus | 'all')[];
@@ -117,6 +141,7 @@ export interface OrderListQueryParam {
   /** Only list orders for a specific product. */
   product_id?: string;
   product_type?: string;
+  retail_portfolio_id?: string;
   start_date?: ISO_8601_MS_UTC;
   user_native_currency?: string;
 }
@@ -169,6 +194,29 @@ export interface CreateOrderResponse {
     product_id: string;
     side: OrderSide;
   };
+}
+
+export interface EditOrderPaylod {
+  order_id: string;
+  price: string;
+  size: string;
+}
+
+export interface PreviewOrderResponse {
+  base_size: string;
+  best_ask: string;
+  best_bid: string;
+  commission_total: string;
+  errs: string[];
+  is_max: boolean;
+  leverage: string;
+  long_leverage: string;
+  order_margin_total: string;
+  order_total: string;
+  quote_size: string;
+  short_leverage: string;
+  slippage: string;
+  warning: string[];
 }
 
 export class OrderAPI {
@@ -273,6 +321,43 @@ export class OrderAPI {
   async placeOrder(newOrder: NewOrder): Promise<CreateOrderResponse> {
     const resource = OrderAPI.URL.ORDERS;
     const response = await this.apiClient.post<CreateOrderResponse>(resource, newOrder);
+    return response.data;
+  }
+
+  /**
+   * Edit an order's size (quantity), or price. Only good-till-cancelled (GTC) Limit Orders can be edited.
+   *
+   * @param data - updates fo the order
+   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_editorder
+   */
+  async editOrder(data: EditOrderPaylod): Promise<{errors?: any; success: boolean}> {
+    const resource = OrderAPI.URL.ORDERS + '/edit';
+    const response = await this.apiClient.post<{errors?: any; success: boolean}>(resource, data);
+    return response.data;
+  }
+
+  /**
+   * Simulate an edit order request with a specified new size, or new price, to preview the result of an edit.
+   * Only limit order types, with time in force type of good-till-cancelled can be edited.
+   *
+   * @param data - updates fo the order
+   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeweditorder
+   */
+  async editOrderPreview(data: EditOrderPaylod): Promise<{errors?: any; success: boolean}> {
+    const resource = OrderAPI.URL.ORDERS + '/edit_preview';
+    const response = await this.apiClient.post<{errors?: any; success: boolean}>(resource, data);
+    return response.data;
+  }
+
+  /**
+   * Preview the results of an order request before sending.
+   *
+   * @param data - order info
+   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder
+   */
+  async previewOrder(data: PreviewOrderPayload): Promise<PreviewOrderResponse> {
+    const resource = OrderAPI.URL.ORDERS + '/preview';
+    const response = await this.apiClient.post<PreviewOrderResponse>(resource, data);
     return response.data;
   }
 }

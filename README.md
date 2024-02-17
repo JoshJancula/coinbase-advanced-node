@@ -48,11 +48,15 @@ import {Coinbase} from 'coinbase-advanced-node';
 const client = new Coinbase(creds);
 ```
 
+## Authentication Schemes
+
+All Advanced Trade & SIWC API calls require authentication, Coinbase has multiple authentication schemes available for different APIs, all schemes are supported in this library. Click [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth) for more info.
+
 ## Usage
 
-The [demo section][3] provides many examples on how to use "coinbase-advanced-node". There is also an automatically generated [API documentation][4]. For a quick start, here is a simple example for a REST request:
+The [demo section](#demos) provides many examples on how to use "coinbase-advanced-node". For a quick start, below is a simple example for a REST request
 
-Both API key and OAuth2 authentication require that you obtain correct permissions (scopes) to access different API endpoints. Read more about scopes [here](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/scopes)
+All authentication methods require that you obtain correct permissions (scopes) to access different API endpoints. Read more about scopes [here](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/scopes)
 
 For [Advanced Trade](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome) orders, use the `order` API. The `buy` & `sell` API's exposed are part of the [Sign In With Coinbase API](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/welcome) which have different capabilities and fee structures
 
@@ -61,41 +65,51 @@ For [Advanced Trade](https://docs.cloud.coinbase.com/advanced-trade-api/docs/wel
 ```typescript
 import {Coinbase} from 'coinbase-advanced-node';
 
-// API key and OAuth are supported in both
-// the SIWC and Advance Trade API's
-// this library supports both methods of authentication
+// Cloud API Keys Can be Generated here
+// https://cloud.coinbase.com/access/api
+// Cloud API keys can only be used on andvance trade endpoints
+const cloudAuth = {
+  cloudApiKeyName: 'organizations/{org_id}/apiKeys/{key_id}',
+  cloudApiSecret: '-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIVATE KEY-----\n',
+};
 
-// API Keys can be generated here:
+const cloudClient = new Coinbase(cloudAuth);
+client.rest.product.getProducts().then(prods => {
+  const message = `Total Products ${prods.data.length}.`;
+  console.log(message);
+});
+
+// Legacy API keys and OAuth are supported in
+// SIWC API's and some of the Advance Trade API's
+// https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth
+
+// Legacy API Keys can be generated here:
 // https://www.coinbase.com/settings/api
 const auth = {
   apiKey: 'ohnwkjnefasodh;',
   apiSecret: 'asdlnasdoiujkswdfsdf',
 };
 
-// or if you are using OAuth
-// https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/sign-in-with-coinbase-integration#registering-oauth2-client
-const oauth = {
-  apiKey: '', // yes these need to be empty strings if using this pkg with oauth
-  apiSecret: '',
-  oauthToken: 'ej09joiunasgukddd09ujoh2i4r874nkjnk;lajs;dlfjaljhfds;sdhjfsdf='
-}
-
-const client = new Coinbase(auth);
-
-const oauthClient = new Coinbase(oauth);
-
-client.rest.account.listAccounts().then(accounts => {
+const legacyClient = new Coinbase(auth);
+legacyClient.rest.account.listAccounts().then(accounts => {
   const message = `Advance Trade accounts "${accounts.data.length}".`;
   console.log(message);
 });
 
+// View OAuth setup info here
+// https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/sign-in-with-coinbase-integration#registering-oauth2-client
+const oauth = {
+  oauthToken: 'ej09joiunasgukddd09ujoh2i4r874nkjnk;lajs;dlfjaljhfds;sdhjfsdf=',
+};
+
+const oauthClient = new Coinbase(oauth);
 oauthClient.rest.account.listCoinbaseAccounts().then(accounts => {
-  const message = `Coinbase accounts "${accounts.data.length}".`;
+  const message = `Coinbase accounts ${accounts.data.length}.`;
   console.log(message);
 });
 ```
 
-## Two factor authentication
+## Two Factor Authentication
 
 OAuth2 authentication requires two factor authentication when debiting funds with the `wallet:transactions:send` scope. When 2FA is required, the API will respond with a `402` status and two_factor_required error. To successfully complete the request, you must make the same request again with the user's 2FA token in the `CB-2FA-TOKEN` header together with the current access token. https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/sign-in-with-coinbase-2fa
 
@@ -118,8 +132,8 @@ client.rest.transaction.sendTransaction(accountID, info).catch(async err => {
 ```
 
 ## Additional Endpoints
-In the instance this package has not been updated to include some endpoint(s) you may need,
-use the `coinbaseRequest` which will properly sign & proxy the request. Please [open an issue](https://github.com/JoshJancula/coinbase-advanced-node/issues) if this occurs.
+
+In the instance this package has not been updated to include some endpoint(s) you may need, use the `coinbaseRequest` which will properly sign & proxy the request. Please [open an issue](https://github.com/JoshJancula/coinbase-advanced-node/issues) if this occurs.
 
 ```typescript
 const client = new Coinbase(creds);
@@ -219,49 +233,10 @@ This project is [MIT](./LICENSE) licensed.
 
 [Please leave a star](https://github.com/joshjancula/coinbase-advanced-node/stargazers) if you find this project useful.
 
----
+## If you'd like to make a donation
 
-## Problems with official Coinbase APIs
-
-There are official Coinbase APIs for Node.js, but they all come with some disadvantages leading to decreased developer experience (DX):
-
-1. [Coinbase's first Node.js API](https://github.com/coinbase/coinbase-exchange-node) has no type safety and got deprecated on [July, 19th 2016](https://github.com/coinbase/coinbase-exchange-node/commit/b8347efdb4e2589367c1395b646d283c9c391681)
-2. [Coinbase's second Node.js API](https://github.com/coinbase/coinbase-advanced-node) has no type safety and got deprecated on [January, 16 2020](https://github.com/coinbase/coinbase-advanced-node/issues/393#issuecomment-574993096)
-3. [Coinbase's current Node.js API](https://docs.cloud.coinbase.com/exchange/reference) ([OAS spec](https://dash.readme.com/api/v1/api-registry/qgumw1pl3iz4yut)) still lacks type safety and does not incorporate best practices like automatic reconnections and request throttling
-
-## Official Coinbase API
-
-Coinbase is versioning its API through [ReadMe.com](https://readme.com/), so you can generate an API client from their [OpenAPI Specification](https://dash.readme.com/api/v1/api-registry/qgumw1pl3iz4yut). ReadMe provides a Node.js package named "[api](https://www.npmjs.com/package/api)" which allows you to retrieve an automatically generated Node.js client:
-
-### Installation
-
-```bash
-npm install api@^4.5.1
 ```
-
-### Usage
-
-```ts
-import api from 'api';
-
-const sdk = api('@coinbase-exchange/v1.0#qgumw1pl3iz4yut');
-
-sdk['ExchangeRESTAPI_GetProductTrades']({
-  product_id: 'BTC-USD',
-}).then(response => {
-  console.log(`Found "${response.length}" trades.`);
-});
+BTC: bc1qctv0q7vlcc80x72z40m6d02spu828tw4rt6jjm
+SOL: PKFFsyqAGZ63U3KViqxLBTfX3r9LjgxrVeBoxTxzbrB
+ATOM: cosmos14c3dsfutycuzjglvhgj4dacmurjsh2wvtehh08
 ```
-
-### Drawbacks
-
-The current Coinbase Node.js SDK (provided by the [api package](https://www.npmjs.com/package/api)) does not support typings for response payloads:
-
-![Official Coinbase API](./coinbase-api-screenshot.png 'Type safety problems in official Coinbase API')
-
-[1]: https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome
-[2]: https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome
-[3]: https://github.com/joshjancula/coinbase-advanced-node/tree/main/src/demo
-[5]: https://www.npmjs.com/package/coinbase-advanced-node
-[8]: https://docs.npmjs.com/about-semantic-versioning
-[9]: https://docs.cloud.coinbase.com/advanced-trade-api/docs/changelog

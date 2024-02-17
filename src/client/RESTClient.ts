@@ -28,6 +28,8 @@ import {DepositAPI} from '../deposit';
 import {AddressAPI} from '../addresses';
 import {BuyAPI} from '../buy';
 import {SellAPI} from '../sell';
+import {PortfolioAPI} from '../portfolios';
+import {ConvertAPI} from '../convert/ConvertAPI';
 
 export interface RESTClient {
   on(
@@ -52,6 +54,7 @@ export class RESTClient extends EventEmitter {
   readonly account: AccountAPI;
   readonly address: AddressAPI;
   readonly buy: BuyAPI;
+  readonly convert: ConvertAPI;
   readonly currency: CurrencyAPI;
   readonly deposit: DepositAPI;
   readonly exchangeRate: ExchangeRateAPI;
@@ -64,6 +67,7 @@ export class RESTClient extends EventEmitter {
   readonly transaction: TransactionAPI;
   readonly user: UserAPI;
   readonly withdraw: WithdrawAPI;
+  readonly portfolios: PortfolioAPI;
 
   private readonly httpClient: AxiosInstance;
   private readonly logger: DebugLogger;
@@ -115,23 +119,30 @@ export class RESTClient extends EventEmitter {
       }
 
       const signedRequest = await this.signRequest({
+        baseUrl: config.baseURL,
         httpMethod: String(config.method).toUpperCase(),
         payload: RESTClient.stringifyPayload(config, config.baseURL.includes('v3')),
         requestPath,
       });
 
-      if (signedRequest.oauth) {
+      if (signedRequest.jwt && config.baseURL.includes('v2')) {
+        throw new Error(
+          `Requests to the SIWC API with Cloud API keys are not supported https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth`
+        );
+      }
+
+      if (signedRequest.oauth || signedRequest.jwt) {
         config.headers = {
           ...config.headers,
           Authorization: `Bearer ${signedRequest.key}`,
           'CB-ACCESS-TIMESTAMP': `${signedRequest.timestamp}`,
-        };
+        } as any;
       } else {
         config.headers = {
           ...config.headers,
           'CB-ACCESS-TIMESTAMP': `${signedRequest.timestamp}`,
-        };
-        if (signedRequest.key !== '') {
+        } as any;
+        if (signedRequest.key) {
           config.headers['CB-ACCESS-SIGN'] = signedRequest.signature;
           config.headers['CB-ACCESS-KEY'] = signedRequest.key;
         }
@@ -155,10 +166,12 @@ export class RESTClient extends EventEmitter {
     this.order = new OrderAPI(this.httpClient);
     this.product = new ProductAPI(this.httpClient, this);
     this.sell = new SellAPI(this.httpClient);
-    this.time = new TimeAPI(connectionData.REST_SIWC);
+    this.time = new TimeAPI(connectionData.REST_SIWC, this.httpClient);
     this.transaction = new TransactionAPI(this.httpClient);
     this.user = new UserAPI(this.httpClient);
     this.withdraw = new WithdrawAPI(this.httpClient);
+    this.portfolios = new PortfolioAPI(this.httpClient);
+    this.convert = new ConvertAPI(this.httpClient);
   }
 
   static stringifyPayload(config: AxiosRequestConfig, excludeParams?: boolean): string {

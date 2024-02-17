@@ -22,8 +22,6 @@ async function main(): Promise<void> {
   const file = path.join(directory, `${productId}-${start}-${granularity}.json`);
 
   fs.writeFileSync(file, JSON.stringify(candles, null, 2));
-
-  console.info(`Dumped "${candles.length}" candles in file "${file}".`);
 }
 
 main().catch(console.error);
