@@ -1,3 +1,20 @@
+### 3.0.0 (2024-02-17)
+
+##### Chores
+
+*  include self_trade_prevention_id on NewOrder ([914e1d69](https://github.com/joshjancula/coinbase-advanced-node/commit/914e1d69cd1c696665dce10aa6609b7e8fd59e98))
+
+##### New Features
+
+*  support conversion apis and adv time ([13064918](https://github.com/joshjancula/coinbase-advanced-node/commit/1306491837f56cb08d3ccb0c2bf0ae80bcf4e16b))
+*  add preview / edit order ([5f8a0c23](https://github.com/joshjancula/coinbase-advanced-node/commit/5f8a0c238c0dee82ffa025f204edb8c61b1eacc4))
+*  support for portfolios ([e9aa40a4](https://github.com/joshjancula/coinbase-advanced-node/commit/e9aa40a4990b018e3bc99d8303ee3c80d0f1677b))
+*  support cloud trading keys ([3246f875](https://github.com/joshjancula/coinbase-advanced-node/commit/3246f875c07457456b5112529912d7a065944c08))
+
+##### Other Changes
+
+*  update demo script ([3dc21e9d](https://github.com/joshjancula/coinbase-advanced-node/commit/3dc21e9dbbe616b3b406ad04af6b83b76de6c241))
+
 #### 2.1.0 (2023-12-14)
 
 ##### Bug Fixes
