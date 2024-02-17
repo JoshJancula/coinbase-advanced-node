@@ -92,6 +92,7 @@ export interface NewOrder {
   order_configuration: OrderConfiguration;
   product_id: string;
   retail_portfolio_id?: string;
+  self_trade_prevention_id?: string;
   side: OrderSide;
 }
 
