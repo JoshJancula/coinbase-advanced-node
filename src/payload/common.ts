@@ -36,12 +36,18 @@ export interface PaginatedData<PayloadType> {
   pagination: {after?: string; before?: string; has_next?: boolean};
 }
 
-export interface Balance {
+/** I'm not fond of how coinbase flips between this Amount & Balance schema but it is what it is */
+export interface Amount {
   amount: string;
   currency: string;
 }
 
-export interface TransactionAmount extends Balance {};
+export interface Balance {
+  currency: string;
+  value: string;
+}
+
+export interface TransactionAmount extends Amount {}
 
 export interface OrderAmount {
   price: string;
@@ -171,4 +177,19 @@ export enum TransactionType {
   TRANSFER = 'transfer',
   /** Withdraw funds from a vault account */
   VAULT_WITHDRAWAL = 'vault_withdrawal',
+}
+
+export interface UserWarning {
+  code: string;
+  context: {
+    details: string[];
+    link_text: string;
+    title: string;
+  };
+  id: string;
+  link: {
+    text: string;
+    url: string;
+  };
+  message: string;
 }

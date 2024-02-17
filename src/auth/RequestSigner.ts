@@ -50,34 +50,34 @@ export class RequestSigner {
 
   static buildJWT(auth: ClientAuthentication, setup: RequestSetup): string {
     const {sign} = require('jsonwebtoken');
-    const key_name = auth.cloudApiKeyName;
-    const key_secret = auth.cloudApiSecret;
-    const request_method = setup.httpMethod.toUpperCase();
+    const keyName = auth.cloudApiKeyName;
+    const keySecret = auth.cloudApiSecret?.replace(/\\n/g, '\n');
+    const requestMethod = setup.httpMethod.toUpperCase();
 
     const url = setup.baseUrl?.startsWith('http') ? new URL(setup.baseUrl).hostname : '';
 
-    const request_path = setup.requestPath;
-    const service_name = setup.ws
+    const requestPath = setup.requestPath;
+    const serviceName = setup.ws
       ? auth.cloudServiceNameWs || 'public_websocket_api'
       : auth.cloudServiceNameApi || 'retail_rest_api_proxy';
 
     const algorithm = 'ES256';
-    const uri = setup.ws ? undefined : request_method + ' ' + url + request_path;
+    const uri = setup.ws ? undefined : requestMethod + ' ' + url + requestPath;
 
     const token = sign(
       {
-        aud: [service_name],
+        aud: [serviceName],
         exp: Math.floor(Date.now() / 1000) + 120,
         iss: 'coinbase-cloud',
         nbf: Math.floor(Date.now() / 1000),
-        sub: key_name,
+        sub: keyName,
         uri,
       },
-      key_secret,
+      keySecret,
       {
         algorithm,
         header: {
-          kid: key_name,
+          kid: keyName,
           nonce: crypto.randomBytes(16).toString('hex'),
         },
       }

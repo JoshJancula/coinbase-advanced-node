@@ -50,11 +50,11 @@ const client = new Coinbase(creds);
 
 ## Authentication Schemes
 
-All Advanced Trade & SIWC API calls require authentication,Coinbase has multiple authentication schemes available for different APIs, all schemes are supported in this library. Click [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth) for more info.
+All Advanced Trade & SIWC API calls require authentication, Coinbase has multiple authentication schemes available for different APIs, all schemes are supported in this library. Click [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth) for more info.
 
 ## Usage
 
-The [demo section][3] provides many examples on how to use "coinbase-advanced-node". There is also an automatically generated [API documentation][4]. For a quick start, here is a simple example for a REST request
+The [demo section](#demos) provides many examples on how to use "coinbase-advanced-node". For a quick start, below is a simple example for a REST request
 
 All authentication methods require that you obtain correct permissions (scopes) to access different API endpoints. Read more about scopes [here](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/scopes)
 

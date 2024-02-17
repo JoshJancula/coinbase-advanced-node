@@ -29,6 +29,7 @@ import {AddressAPI} from '../addresses';
 import {BuyAPI} from '../buy';
 import {SellAPI} from '../sell';
 import {PortfolioAPI} from '../portfolios';
+import {ConvertAPI} from '../convert/ConvertAPI';
 
 export interface RESTClient {
   on(
@@ -53,6 +54,7 @@ export class RESTClient extends EventEmitter {
   readonly account: AccountAPI;
   readonly address: AddressAPI;
   readonly buy: BuyAPI;
+  readonly convert: ConvertAPI;
   readonly currency: CurrencyAPI;
   readonly deposit: DepositAPI;
   readonly exchangeRate: ExchangeRateAPI;
@@ -164,11 +166,12 @@ export class RESTClient extends EventEmitter {
     this.order = new OrderAPI(this.httpClient);
     this.product = new ProductAPI(this.httpClient, this);
     this.sell = new SellAPI(this.httpClient);
-    this.time = new TimeAPI(connectionData.REST_SIWC);
+    this.time = new TimeAPI(connectionData.REST_SIWC, this.httpClient);
     this.transaction = new TransactionAPI(this.httpClient);
     this.user = new UserAPI(this.httpClient);
     this.withdraw = new WithdrawAPI(this.httpClient);
     this.portfolios = new PortfolioAPI(this.httpClient);
+    this.convert = new ConvertAPI(this.httpClient);
   }
 
   static stringifyPayload(config: AxiosRequestConfig, excludeParams?: boolean): string {
