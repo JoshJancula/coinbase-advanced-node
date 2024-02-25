@@ -2,7 +2,7 @@ import {AxiosInstance} from 'axios';
 import {ISO_8601_MS_UTC, OrderAmount, OrderSide, PaginatedData, Pagination, UNIX_STAMP} from '../payload/common';
 import {CandleBucketUtil} from './CandleBucketUtil';
 import {RESTClient} from '..';
-import {formatPaginationIntoParams} from '../util/shared-request';
+import {formatPaginationIntoParams, serializeParamsArray} from '../util/shared-request';
 
 export interface Product {
   auction_mode: boolean;
@@ -377,7 +377,10 @@ export class ProductAPI {
    */
   async getBestAsksAndBids(productIds: string[]): Promise<PriceBook[]> {
     const resource = `/brokerage/best_bid_ask`;
-    const response = await this.apiClient.get(resource, {params: {product_ids: productIds}});
+    const response = await this.apiClient.get(resource, {
+      params: {product_ids: productIds},
+      paramsSerializer: serializeParamsArray,
+    });
     return response.data.pricebooks;
   }
 
