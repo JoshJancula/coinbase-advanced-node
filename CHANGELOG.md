@@ -1,3 +1,9 @@
+#### 3.0.1 (2024-02-26)
+
+##### Bug Fixes
+
+*  getBestAsksAndBids by removing [] from generated params ([7f6615c0](https://github.com/joshjancula/coinbase-advanced-node/commit/7f6615c0c7dce0b10756dda21bad726b13cd92d3))
+
 ### 3.0.0 (2024-02-17)
 
 ##### Chores
