@@ -10,6 +10,7 @@
     "buffer": "6.0.3",
     "bufferutil": "4.0.7",
     "jsonwebtoken": "^9.0.2",
+    "qs": "^6.11.2",
     "reconnecting-websocket": "4.4.0",
     "utf-8-validate": "5.0.10",
     "ws": "8.9.0"
@@ -17,6 +18,7 @@
   "description": "Coinbase API for Node.js, written in TypeScript and covered by tests.",
   "devDependencies": {
     "@types/jasmine": "4.0.3",
+    "@types/qs": "^6.9.11",
     "@typescript-eslint/eslint-plugin": "5.45.0",
     "@typescript-eslint/parser": "5.45.0",
     "cross-env": "7.0.3",

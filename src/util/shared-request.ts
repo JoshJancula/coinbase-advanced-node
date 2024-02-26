@@ -1,5 +1,10 @@
 import {AxiosInstance} from 'axios';
 import {NewSIWCTransaction, PaginatedData, Pagination} from '../payload';
+import {stringify} from 'qs';
+
+export const serializeParamsArray = (params: any): string => {
+  return stringify(params, {arrayFormat: 'repeat', indices: false});
+};
 
 export const formatPaginationIntoParams = (pagination: Pagination, siwc = false, params = {}): object => {
   if (pagination.after) {
