@@ -30,6 +30,7 @@ import {BuyAPI} from '../buy';
 import {SellAPI} from '../sell';
 import {PortfolioAPI} from '../portfolios';
 import {ConvertAPI} from '../convert/ConvertAPI';
+import {serializeParamsArray} from '../util/shared-request';
 
 export interface RESTClient {
   on(
@@ -80,6 +81,7 @@ export class RESTClient extends EventEmitter {
     this.logger = util.debuglog('coinbase-advanced-node');
 
     this.httpClient = axios.create({
+      paramsSerializer: serializeParamsArray,
       timeout: 50_000,
     });
 
