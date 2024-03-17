@@ -67,7 +67,7 @@ export interface StopOrderGTC {
 }
 
 export interface StopOrderGTD {
-  stop_limit_stop_limit_gtc: {
+  stop_limit_stop_limit_gtd: {
     base_size: string;
     end_time: ISO_8601_MS_UTC;
     limit_price: string;
@@ -83,7 +83,21 @@ export interface MarketOrder {
   };
 }
 
-export type OrderConfiguration = MarketOrder | LimitOrderGTC | LimitOrderGTD | StopOrderGTC | StopOrderGTD;
+/**  (Smart Order Routing) Limit IOC (Immediate Or Cancel) */
+export interface LimitOrderIOC {
+  sor_limit_ioc: {
+    limit_price: string;
+    quote_size: string;
+  };
+}
+
+export type OrderConfiguration =
+  | MarketOrder
+  | LimitOrderGTC
+  | LimitOrderGTD
+  | StopOrderGTC
+  | StopOrderGTD
+  | LimitOrderIOC;
 
 export interface NewOrder {
   client_order_id: string;
