@@ -222,11 +222,13 @@ export interface WebsocketUserOrder {
   creation_time: ISO_8601_MS_UTC;
   cumulative_quantity: string;
   leaves_quantity: string;
+  limit_price: string;
   order_id: string;
   order_side: OrderSide;
   order_type: OrderType;
   product_id: string;
   status: OrderStatus;
+  stop_price: string;
   total_fees: string;
 }
 
