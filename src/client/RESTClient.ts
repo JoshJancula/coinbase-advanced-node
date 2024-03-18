@@ -31,6 +31,7 @@ import {SellAPI} from '../sell';
 import {PortfolioAPI} from '../portfolios';
 import {ConvertAPI} from '../convert/ConvertAPI';
 import {serializeParamsArray} from '../util/shared-request';
+import {PaymentAPI} from '../payment/PaymentAPI';
 
 export interface RESTClient {
   on(
@@ -62,13 +63,14 @@ export class RESTClient extends EventEmitter {
   readonly fee: FeeAPI;
   readonly fill: FillAPI;
   readonly order: OrderAPI;
+  readonly payment: PaymentAPI;
+  readonly portfolios: PortfolioAPI;
   readonly product: ProductAPI;
   readonly sell: SellAPI;
   readonly time: TimeAPI;
   readonly transaction: TransactionAPI;
   readonly user: UserAPI;
   readonly withdraw: WithdrawAPI;
-  readonly portfolios: PortfolioAPI;
 
   private readonly httpClient: AxiosInstance;
   private readonly logger: DebugLogger;
@@ -174,6 +176,7 @@ export class RESTClient extends EventEmitter {
     this.withdraw = new WithdrawAPI(this.httpClient);
     this.portfolios = new PortfolioAPI(this.httpClient);
     this.convert = new ConvertAPI(this.httpClient);
+    this.payment = new PaymentAPI(this.httpClient);
   }
 
   static stringifyPayload(config: AxiosRequestConfig, excludeParams?: boolean): string {
