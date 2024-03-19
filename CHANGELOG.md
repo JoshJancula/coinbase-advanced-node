@@ -1,3 +1,18 @@
+### 3.1.0 (2024-03-19)
+
+##### Chores
+
+*  support for Limit IOC orders ([06401a04](https://github.com/joshjancula/coinbase-advanced-node/commit/06401a049bf7d0b16670e6bacb7df1d19e0f0580))
+*  Added Limit Price and Stop Limit Price to messages for the Websocket User Channel ([8185d04f](https://github.com/joshjancula/coinbase-advanced-node/commit/8185d04f23f921e3151542935e2f3a48325333df))
+
+##### New Features
+
+*  support payment api ([d526c942](https://github.com/joshjancula/coinbase-advanced-node/commit/d526c9428d116577a18f773d58ae3d586ed5ebe9))
+
+##### Refactors
+
+*  time api as it is now public ([3e422d67](https://github.com/joshjancula/coinbase-advanced-node/commit/3e422d6770b7399379f893285cd83b0116c92956))
+
 #### 3.0.1 (2024-02-26)
 
 ##### Bug Fixes
