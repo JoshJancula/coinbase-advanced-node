@@ -170,7 +170,7 @@ export class RESTClient extends EventEmitter {
     this.order = new OrderAPI(this.httpClient);
     this.product = new ProductAPI(this.httpClient, this);
     this.sell = new SellAPI(this.httpClient);
-    this.time = new TimeAPI(connectionData.REST_SIWC, this.httpClient);
+    this.time = new TimeAPI(connectionData.REST_SIWC, connectionData.REST_ADV_TRADE);
     this.transaction = new TransactionAPI(this.httpClient);
     this.user = new UserAPI(this.httpClient);
     this.withdraw = new WithdrawAPI(this.httpClient);
