@@ -74,7 +74,7 @@ const cloudAuth = {
 };
 
 const cloudClient = new Coinbase(cloudAuth);
-client.rest.product.getProducts().then(prods => {
+cloudClient.rest.product.getProducts().then(prods => {
   const message = `Total Products ${prods.data.length}.`;
   console.log(message);
 });
