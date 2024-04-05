@@ -233,6 +233,33 @@ export interface PreviewOrderResponse {
   warning: string[];
 }
 
+export interface ClosePositionParams {
+  /** A unique ID provided by the client for their own identification purposes. This ID differs from the order_id generated for the order. If the ID provided is not unique, the order fails to be created and the order corresponding to that ID is returned. */
+  client_order_id: string;
+  /** The product this order was created for */
+  product_id: string;
+  /** Number of contracts a user wants to close for a position */
+  size: string;
+}
+
+export interface ClosePositionResponse {
+  error_response?: {
+    error: string;
+    error_details: string;
+    message: string;
+    new_order_failure_reason: string;
+    preview_failure_reason: string;
+  };
+  order_configuration?: OrderConfiguration;
+  success: boolean;
+  success_response: {
+    client_order_id: string;
+    order_id: string;
+    product_id: string;
+    side: OrderSide;
+  };
+}
+
 export class OrderAPI {
   static readonly URL = {
     ORDERS: `/brokerage/orders`,
@@ -266,6 +293,20 @@ export class OrderAPI {
   async cancelOrder(orderId: string, _productId?: string): Promise<CancelOrderResponse> {
     const x = await this.cancelOpenOrders(orderId);
     return x[0];
+  }
+
+  /**
+   * Close Position
+   * Places an order to close any open positions for a specified product_id.
+   *
+   * @param data - ClosePositionParams
+   * @returns ClosePositionResponse
+   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_closeposition
+   */
+  async closePosition(data: ClosePositionParams): Promise<ClosePositionResponse> {
+    const resource = OrderAPI.URL.ORDERS + '/close_position';
+    const response = await this.apiClient.post(resource, data);
+    return response.data;
   }
 
   /**
