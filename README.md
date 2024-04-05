@@ -4,7 +4,7 @@ Unofficial Coinbase API for Node.js, written in TypeScript and covered by tests.
 
 ## Motivation
 
-The purpose of this [coinbase-advanced-node][5] package is to maintain a recent Coinbase API for Node.js with type safety through TypeScript. This project began as a fork of [coinbase-pro-node](https://github.com/bennycode/coinbase-pro-node) in efforts to provide a smooth transition for anyone migrating to the [Advanced Trade API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome) due to the deprecation of the former [Exchange/Pro API](https://docs.cloud.coinbase.com/exchange/docs/welcome).
+The purpose of this [coinbase-advanced-node](https://www.npmjs.com/package/coinbase-advanced-node) package is to maintain a recent Coinbase API for Node.js with type safety through TypeScript. This project began as a fork of [coinbase-pro-node](https://github.com/bennycode/coinbase-pro-node) in efforts to provide a smooth transition for anyone migrating to the [Advanced Trade API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome) due to the deprecation of the former [Exchange/Pro API](https://docs.cloud.coinbase.com/exchange/docs/welcome).
 
 ## Features
 
@@ -13,7 +13,7 @@ The purpose of this [coinbase-advanced-node][5] package is to maintain a recent 
 - **Convenient.** Request throttling is built-in. Don't worry about rate limiting.
 - **Comfortable.** More than an API client. You will get extras like [candle watching](https://github.com/joshjancula/coinbase-advanced-node/blob/main/src/demo/rest-watch-candles.ts).
 - **Maintained.** Automated security updates. No threats from outdated dependencies.
-- **Documented.** Get started with [demo scripts][3] and [generated documentation][4].
+- **Documented.** Get started with [demo scripts](#demos) and [generated documentation][4].
 - **Modern.** HTTP client with Promise API. Don't lose yourself in callback hell.
 - **Robust.** WebSocket reconnection is built-in. No problems if your Wi-Fi is gone.
 - **Reliable.** Following [semantic versioning][8]. Get notified about breaking changes.
@@ -67,7 +67,6 @@ import {Coinbase} from 'coinbase-advanced-node';
 
 // Cloud API Keys Can be Generated here
 // https://cloud.coinbase.com/access/api
-// Cloud API keys can only be used on andvance trade endpoints
 const cloudAuth = {
   cloudApiKeyName: 'organizations/{org_id}/apiKeys/{key_id}',
   cloudApiSecret: '-----BEGIN EC PRIVATE KEY-----\nYOUR PRIVATE KEY\n-----END EC PRIVATE KEY-----\n',
@@ -154,7 +153,7 @@ If you want to listen to WebSocket messages, have a look at these demo scripts:
 
 ### Demos
 
-All [demo scripts][3] are executable from the root directory. If you want to use specific credentials with a demo script, simply add a `.env` file to the root of this package to [modify environment variables](https://github.com/motdotla/dotenv/tree/v8.2.0#usage) used in [init-client.ts](https://github.com/joshjancula/coinbase-advanced-node/blob/main/src/demo/init-client.ts).
+All [demo scripts](#demos) are executable from the root directory. If you want to use specific credentials with a demo script, simply add a `.env` file to the root of this package to [modify environment variables](https://github.com/motdotla/dotenv/tree/v8.2.0#usage) used in [init-client.ts](https://github.com/joshjancula/coinbase-advanced-node/blob/main/src/demo/init-client.ts).
 
 ```bash
 npx ts-node ./src/demo/dump-candles.ts
@@ -223,7 +222,7 @@ The following commits will help you getting started quickly with the code base:
 - [Add REST API endpoint](https://github.com/bennycode/coinbase-prod-node/commit/9920c2f4343985c349b68e2a47d7fe2c42e23e34)
 - [Add REST API endpoint (with fixtures)](https://github.com/bennycode/coinbase-pro-node/commit/8a150fecb7d32b7b7cd39a8109985f665aaee26e)
 
-All resources can be found in the [Coinbase Advance Trade API reference][2]. For the latest updates, check [Coinbase's API Changelog][9].
+All resources can be found in the [Coinbase Advance Trade API reference](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome). For the latest updates, check [Coinbase's API Changelog](https://docs.cloud.coinbase.com/advanced-trade-api/docs/changelog).
 
 ## License
 

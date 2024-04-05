@@ -261,4 +261,32 @@ describe('OrderAPI', () => {
       expect(o.success).toBe(true);
     });
   });
+
+  describe('closePosition', () => {
+    it('should edit an order', async () => {
+      nock(global.REST_URL)
+        .post(`${OrderAPI.URL.ORDERS}/close_position`)
+        .query(true)
+        .reply(
+          200,
+          JSON.stringify({
+            success: true,
+            success_response: {
+              client_order_id: 'xxxxxxxxxxxxx',
+              order_id: 'yyyyyyyyyyyy',
+              product_id: 'BTC-US,D',
+              side: 'BUY',
+            },
+          })
+        );
+
+      const o = await global.client.rest.order.closePosition({
+        client_order_id: 'xxxxxxxxxxxxx',
+        product_id: 'BTC-USD',
+        size: '.001',
+      });
+
+      expect(o.success).toBe(true);
+    });
+  });
 });

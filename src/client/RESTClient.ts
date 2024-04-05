@@ -129,12 +129,6 @@ export class RESTClient extends EventEmitter {
         requestPath,
       });
 
-      if (signedRequest.jwt && config.baseURL.includes('v2')) {
-        throw new Error(
-          `Requests to the SIWC API with Cloud API keys are not supported https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth`
-        );
-      }
-
       if (signedRequest.oauth || signedRequest.jwt) {
         config.headers = {
           ...config.headers,
