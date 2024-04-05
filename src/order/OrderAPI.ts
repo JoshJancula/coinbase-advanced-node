@@ -239,7 +239,7 @@ export interface ClosePositionParams {
   /** The product this order was created for */
   product_id: string;
   /** Number of contracts a user wants to close for a position */
-  size: string;
+  size?: string;
 }
 
 export interface ClosePositionResponse {
