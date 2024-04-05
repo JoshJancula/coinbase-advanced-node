@@ -1,3 +1,15 @@
+### 3.2.0 (2024-04-05)
+
+##### Chores
+
+*  fix types ([7e014e87](https://github.com/joshjancula/coinbase-advanced-node/commit/7e014e87af6e889227e5e4ff72143b8c334cdd18))
+*  add types & expose close position ([fddf1a4c](https://github.com/joshjancula/coinbase-advanced-node/commit/fddf1a4c90a5bff00e0d1509bd3b3a30baca0854))
+*  siwc supports cloud auth now ([4d8b1a43](https://github.com/joshjancula/coinbase-advanced-node/commit/4d8b1a437a150e161498710e136d8a4f4e37a37d))
+
+##### Documentation Changes
+
+*  updated readme ([3f6575d3](https://github.com/joshjancula/coinbase-advanced-node/commit/3f6575d3744137d44345d0efa9c16bd33b58be23))
+
 ### 3.1.0 (2024-03-19)
 
 ##### Chores
@@ -13,7 +25,7 @@
 
 *  time api as it is now public ([3e422d67](https://github.com/joshjancula/coinbase-advanced-node/commit/3e422d6770b7399379f893285cd83b0116c92956))
 
-#### 3.0.1 (2024-02-26)
+### 3.0.1 (2024-02-26)
 
 ##### Bug Fixes
 
@@ -36,13 +48,13 @@
 
 *  update demo script ([3dc21e9d](https://github.com/joshjancula/coinbase-advanced-node/commit/3dc21e9dbbe616b3b406ad04af6b83b76de6c241))
 
-#### 2.1.0 (2023-12-14)
+### 2.1.0 (2023-12-14)
 
 ##### Bug Fixes
 
 *  baseUrl for siwc innacurate ([f492c5b0](https://github.com/joshjancula/coinbase-advanced-node/commit/f492c5b0911539d0ef61d31bbcff434322b81a1a))
 
-#### 2.0.0 (2023-10-11)
+### 2.0.0 (2023-10-11)
 
 ### ⚠ BREAKING CHANGES
 
@@ -63,13 +75,13 @@
 
 *  add endpoints & types for pricebooks ([ecd2fa69](https://github.com/joshjancula/coinbase-advanced-node/commit/ecd2fa69a32c23aa4550f221fab558766ca546e4))
 
-#### 1.0.3 (2023-02-20)
+### 1.0.3 (2023-02-20)
 
 ##### Chores
 
 *  update types from feb 9 cb update ([43b11c53](https://github.com/joshjancula/coinbase-advanced-node/commit/43b11c5398e0abdd5e9494807c311c25549344e9))
 
-#### 1.0.2 (2023-01-31)
+### 1.0.2 (2023-01-31)
 
 ##### Bug Fixes
 
