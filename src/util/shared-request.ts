@@ -32,7 +32,7 @@ export class SharedRequestService {
     const resource = customPath || `/accounts/${account}/${this.operation}`;
     let params = {};
     if (pagination) {
-      params = formatPaginationIntoParams(params, true);
+      params = formatPaginationIntoParams(pagination, true);
     }
     const response = await this.apiClient.get(resource, {
       params,
