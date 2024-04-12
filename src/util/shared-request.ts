@@ -54,7 +54,8 @@ export class SharedRequestService {
   }
 
   async createNew<T>(data: NewSIWCTransaction): Promise<T> {
-    const resource = `/accounts/${data.accountId}/${this.operation}`;
+    const resource = `/accounts/${data.accountId?.toString()}/${this.operation}`;
+    delete (data as any).accountId;
     const response = await this.apiClient.post(resource, data);
     return response.data.data;
   }
