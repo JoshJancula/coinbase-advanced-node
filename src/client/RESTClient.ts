@@ -55,6 +55,11 @@ export class RESTClient extends EventEmitter {
 
   readonly account: AccountAPI;
   readonly address: AddressAPI;
+  /**
+   * @deprecated
+   * On November 30, 2024 the Sign in with Coinbase v2 Buys and Sells APIs were deprecated.
+   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/changelog#2023-oct-23
+   */
   readonly buy: BuyAPI;
   readonly convert: ConvertAPI;
   readonly currency: CurrencyAPI;
@@ -66,6 +71,11 @@ export class RESTClient extends EventEmitter {
   readonly payment: PaymentAPI;
   readonly portfolios: PortfolioAPI;
   readonly product: ProductAPI;
+  /**
+   * @deprecated
+   * On November 30, 2024 the Sign in with Coinbase v2 Buys and Sells APIs were deprecated.
+   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/changelog#2023-oct-23
+   */
   readonly sell: SellAPI;
   readonly time: TimeAPI;
   readonly transaction: TransactionAPI;

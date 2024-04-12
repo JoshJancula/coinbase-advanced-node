@@ -32,7 +32,7 @@ export class SharedRequestService {
     const resource = customPath || `/accounts/${account}/${this.operation}`;
     let params = {};
     if (pagination) {
-      params = formatPaginationIntoParams(params, true);
+      params = formatPaginationIntoParams(pagination, true);
     }
     const response = await this.apiClient.get(resource, {
       params,
@@ -54,7 +54,8 @@ export class SharedRequestService {
   }
 
   async createNew<T>(data: NewSIWCTransaction): Promise<T> {
-    const resource = `/accounts/${data.accountId}/${this.operation}`;
+    const resource = `/accounts/${data.accountId?.toString()}/${this.operation}`;
+    delete (data as any).accountId;
     const response = await this.apiClient.post(resource, data);
     return response.data.data;
   }

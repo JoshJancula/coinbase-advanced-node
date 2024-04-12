@@ -72,6 +72,7 @@ export interface BasicTransactionInformation {
 }
 
 export interface NewFiatTransaction {
+  /** The accountId to send funds from */
   accountId: string;
   amount: string;
   commit?: boolean;
@@ -80,6 +81,7 @@ export interface NewFiatTransaction {
 }
 
 export interface SIWCOrder {
+  /** The accountId to place the order must be the id associated with the cryptocurrency. */
   accountId: string;
   /** Whether or not you would still like to buy if you have to wait for your money to arrive to lock in a price  */
   agree_btc_amount_varies: boolean;
