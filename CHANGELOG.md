@@ -1,3 +1,14 @@
+### 3.4.0 (2024-04-12)
+
+##### Chores
+
+*  update typedoc and remove unecessary proxy of accountId ([8293c560](https://github.com/joshjancula/coinbase-advanced-node/commit/8293c5605ed2a45501d981a940184b3bc5bb2db1))
+*  mark siwc v2 buy/sell as deprecated ([22208658](https://github.com/joshjancula/coinbase-advanced-node/commit/22208658a5ab59e9152a959807072809ec945a7c))
+
+##### Bug Fixes
+
+*  resolve params in shared req ([976acada](https://github.com/joshjancula/coinbase-advanced-node/commit/976acada320d14e04ef9b6a76d44faf0e0e98ef0))
+
 ### 3.2.0 (2024-04-05)
 
 ##### Chores
