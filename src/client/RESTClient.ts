@@ -153,6 +153,11 @@ export class RESTClient extends EventEmitter {
         if (signedRequest.key) {
           config.headers['CB-ACCESS-SIGN'] = signedRequest.signature;
           config.headers['CB-ACCESS-KEY'] = signedRequest.key;
+        } else {
+          const isProductApi = Object.values(ProductAPI.URL).find(v => config.url?.includes(v));
+          if (isProductApi) {
+            config.url = config.url?.replace(`brokerage/`, `brokerage/market/`);
+          }
         }
       }
 
