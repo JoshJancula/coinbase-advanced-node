@@ -6,16 +6,16 @@ export const serializeParamsArray = (params: any): string => {
   return stringify(params, {arrayFormat: 'repeat', indices: false});
 };
 
-export const formatPaginationIntoParams = (pagination: Pagination, siwc = false, params = {}): object => {
-  if (pagination.after) {
+export const formatPaginationIntoParams = (pagination: Pagination | undefined, siwc = false, params = {}): Object => {
+  if (pagination?.after) {
     const d = siwc ? {starting_after: pagination.after} : {cursor: pagination.after};
     Object.assign(params, d);
   }
-  if (pagination.before) {
-    const d = siwc ? {ending_before: pagination.before} : {cursor: pagination.before};
+  if (pagination?.before) {
+    const d = siwc ? {ending_before: pagination.before} : {};
     Object.assign(params, d);
   }
-  if (pagination.limit) {
+  if (pagination?.limit) {
     Object.assign(params, {limit: pagination.limit});
   } else {
     Object.assign(params, {limit: 250});

@@ -25,15 +25,30 @@ export enum TransactionStatus {
 export interface Pagination {
   /** Request page after (older) this pagination id. */
   after?: string;
-  /** Request page before (newer) this pagination id. */
+  /** Request page before (newer) this pagination id. Only supported on SIWC calls */
   before?: string;
   /** Number of results per request. Maximum 100. Default 100. */
   limit?: number;
 }
 
+export interface TimeBasedPagination {
+  /** Ending before this time */
+  end?: UNIX_STAMP;
+  /** Total to return */
+  limit?: number;
+  /** Starting after this time */
+  start?: UNIX_STAMP;
+}
+
 export interface PaginatedData<PayloadType> {
   data: PayloadType[];
-  pagination: {after?: string; before?: string; has_next?: boolean};
+  pagination: {
+    /** Users can use this string to pass in the next call to this endpoint, and repeat this process to fetch through pagination. */
+    after?: string;
+    /** before is only supported on siwc calls */
+    before?: string;
+    has_next?: boolean;
+  };
 }
 
 /** I'm not fond of how coinbase flips between this Amount & Balance schema but it is what it is */
