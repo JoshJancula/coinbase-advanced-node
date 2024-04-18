@@ -91,13 +91,53 @@ export interface LimitOrderIOC {
   };
 }
 
+/** This feature is currently in open Beta and may be taken down to resolve issues during testing.
+ *  FOK orders are either fully filled immediately or killed and cannot be postOnly.
+ *  FOK orders are validated at most 20% away from mid market in either direction.
+ * @see https://docs.cloud.coinbase.com/advanced-trade-api/docs/changelog#2024-apr-16
+ *  */
+export interface LimitFillOrKill {
+  limit_limit_fok: {
+    base_size: string;
+    limit_price: string;
+  };
+}
+
+/** This feature is currently in closed beta and may be taken down to resolve issues during testing.
+ *  Bracket is an order type available on Coinbase Advanced that allows users to buy/sell with a limit price while mitigating potential losses in volatile markets
+ * @see https://docs.cloud.coinbase.com/advanced-trade-api/docs/changelog#2024-mar-28
+ *  */
+export interface TriggerBracketGTC {
+  trigger_bracket_gtc: {
+    base_size: string;
+    limit_price: string;
+    stop_trigger_price: string;
+  };
+}
+
+/** This feature is currently in closed beta and may be taken down to resolve issues during testing.
+ *  Bracket is an order type available on Coinbase Advanced that allows users to buy/sell with a limit price while mitigating potential losses in volatile markets
+ * @see https://docs.cloud.coinbase.com/advanced-trade-api/docs/changelog#2024-mar-28
+ *  */
+export interface TriggerBracketGTD {
+  trigger_bracket_gtd: {
+    base_size: string;
+    end_time: ISO_8601_MS_UTC;
+    limit_price: string;
+    stop_trigger_price: string;
+  };
+}
+
 export type OrderConfiguration =
   | MarketOrder
   | LimitOrderGTC
   | LimitOrderGTD
   | StopOrderGTC
   | StopOrderGTD
-  | LimitOrderIOC;
+  | LimitOrderIOC
+  | LimitFillOrKill
+  | TriggerBracketGTC
+  | TriggerBracketGTD;
 
 export interface NewOrder {
   client_order_id: string;
