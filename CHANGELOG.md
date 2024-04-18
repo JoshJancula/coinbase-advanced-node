@@ -1,3 +1,18 @@
+### 3.4.0 (2024-04-18)
+
+##### Chores
+
+*  support bracket & fok orders, updated typedoc ([49b89891](https://github.com/joshjancula/coinbase-advanced-node/commit/49b89891d50469e5bd650eba30d488fc581442db))
+*  release v3.3.0 ([5839ed7a](https://github.com/joshjancula/coinbase-advanced-node/commit/5839ed7a4157a3494242985ee2c775da4ea5a2bf))
+
+##### New Features
+
+*  support public endpoints ([8e365bd7](https://github.com/joshjancula/coinbase-advanced-node/commit/8e365bd742ac18acea6b33ecc102016ccb2058c7))
+
+##### Bug Fixes
+
+*  params for getTrades & updated unit test ([e50601e4](https://github.com/joshjancula/coinbase-advanced-node/commit/e50601e4f97c1b253e688cd9f1765df1632a9bff))
+
 ### 3.3.0 (2024-04-12)
 
 ##### Chores

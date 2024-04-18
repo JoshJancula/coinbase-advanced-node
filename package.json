@@ -110,5 +110,5 @@
     "test:types": "yarn lint:types",
     "prepare": "husky install"
   },
-  "version": "3.3.0"
+  "version": "3.4.0"
 }
