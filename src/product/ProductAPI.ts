@@ -1,8 +1,16 @@
+/* eslint-disable sort-keys-fix/sort-keys-fix */
 import {AxiosInstance} from 'axios';
-import {ISO_8601_MS_UTC, OrderAmount, OrderSide, PaginatedData, Pagination, UNIX_STAMP} from '../payload/common';
+import {
+  ISO_8601_MS_UTC,
+  OrderAmount,
+  OrderSide,
+  PaginatedData,
+  Pagination,
+  TimeBasedPagination,
+  UNIX_STAMP,
+} from '../payload/common';
 import {CandleBucketUtil} from './CandleBucketUtil';
 import {RESTClient} from '..';
-import {formatPaginationIntoParams} from '../util/shared-request';
 
 export interface Product {
   auction_mode: boolean;
@@ -172,6 +180,9 @@ export interface MarketTradesResponse extends PaginatedData<Trade> {
 
 export class ProductAPI {
   static readonly URL = {
+    BEST_BID_ASK: `/brokerage/best_bid_ask`,
+    PRODUCT_BOOK: `/brokerage/product_book`,
+    // eslint-disable-next-line sort-keys
     PRODUCTS: `/brokerage/products`,
   };
 
@@ -322,22 +333,19 @@ export class ProductAPI {
    * Get the latest trades for a product.
    *
    * @param productId - Representation for base and counter
-   * @param pagination - Pagination field
+   * @param pagination - Pagination field, use of Pagination is deprecated use TimeBasedPagination
    * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getmarkettrades
    */
-  async getTrades(productId: string, pagination?: Pagination): Promise<MarketTradesResponse> {
+  async getTrades(productId: string, pagination?: Pagination | TimeBasedPagination): Promise<MarketTradesResponse> {
     const resource = `${ProductAPI.URL.PRODUCTS}/${productId}/ticker`;
-    let params: any = {limit: pagination?.limit || 999};
-    if (pagination) {
-      params = formatPaginationIntoParams(pagination, false, params);
-    }
+    const params = {...pagination, ...{limit: pagination?.limit || 999}};
     const response = await this.apiClient.get(resource, {params});
     return {
       best_ask: response.data.best_ask,
       best_bid: response.data.best_bid,
       data: response.data.trades,
       pagination: {
-        after: (pagination?.after || 0).toString(),
+        after: '0',
         before: response.data.num_products,
         has_next: false,
       },
@@ -376,8 +384,7 @@ export class ProductAPI {
    * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getbestbidask
    */
   async getBestAsksAndBids(productIds: string[]): Promise<PriceBook[]> {
-    const resource = `/brokerage/best_bid_ask`;
-    const response = await this.apiClient.get(resource, {
+    const response = await this.apiClient.get(ProductAPI.URL.BEST_BID_ASK, {
       params: {product_ids: productIds},
     });
     return response.data.pricebooks;
@@ -390,9 +397,8 @@ export class ProductAPI {
    * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproductbook
    */
   async getProductBook(productId: string, limit?: number): Promise<PriceBook> {
-    const resource = `/brokerage/product_book`;
     const params = {limit: limit || 250, product_id: productId};
-    const response = await this.apiClient.get(resource, {params});
+    const response = await this.apiClient.get(ProductAPI.URL.PRODUCT_BOOK, {params});
     return response.data.pricebook;
   }
 

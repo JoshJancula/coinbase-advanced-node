@@ -13,10 +13,10 @@ The purpose of this [coinbase-advanced-node](https://www.npmjs.com/package/coinb
 - **Convenient.** Request throttling is built-in. Don't worry about rate limiting.
 - **Comfortable.** More than an API client. You will get extras like [candle watching](https://github.com/joshjancula/coinbase-advanced-node/blob/main/src/demo/rest-watch-candles.ts).
 - **Maintained.** Automated security updates. No threats from outdated dependencies.
-- **Documented.** Get started with [demo scripts](#demos) and [generated documentation][4].
+- **Documented.** Get started with [demo scripts](#demos)
 - **Modern.** HTTP client with Promise API. Don't lose yourself in callback hell.
 - **Robust.** WebSocket reconnection is built-in. No problems if your Wi-Fi is gone.
-- **Reliable.** Following [semantic versioning][8]. Get notified about breaking changes.
+- **Reliable.** Following [semantic versioning](https://semver.org/). Get notified about breaking changes.
 
 ## Installation
 
@@ -50,7 +50,7 @@ const client = new Coinbase(creds);
 
 ## Authentication Schemes
 
-All Advanced Trade & SIWC API calls require authentication, Coinbase has multiple authentication schemes available for different APIs, all schemes are supported in this library. Click [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth) for more info.
+All Advanced Trade & SIWC API calls require authentication, with the exception of the `product` & `time` API'S which are public. All websocket channels minus the `user` channel are public as well. Coinbase has multiple authentication schemes available for different APIs, all schemes are supported in this library. Click [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth) for more info.
 
 ## Usage
 
@@ -150,6 +150,8 @@ If you want to listen to WebSocket messages, have a look at these demo scripts:
 
 - [Subscribe to "ticker" channel (real-time price updates)](https://github.com/joshjancula/coinbase-advanced-node/blob/main/src/demo/websocket-ticker.ts)
 - [Subscribe to authenticated "user" channel](https://github.com/joshjancula/coinbase-advanced-node/blob/main/src/demo/websocket-user.ts)
+
+**All websocket channels minus the `user` channel are public**
 
 ### Demos
 
