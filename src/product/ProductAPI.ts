@@ -36,6 +36,8 @@ export interface Product {
   quote_name: string;
   status: string;
   trading_disabled: boolean;
+  /** Reflects whether an FCM product has expired. For SPOT, set get_tradability_status to get a return value here. Defaulted to false for all other product types. */
+  view_only?: boolean;
   volume_24h: string;
   volume_percentage_change_24h: string;
   watched: boolean;
@@ -167,6 +169,8 @@ export enum ProductEvent {
 
 export interface ProductsQueryParams {
   contract_expiry_type?: string;
+  /** Whether or not to populate view_only with the tradability status of the product. This is only enabled for SPOT products. */
+  get_tradability_status?: boolean;
   limit?: number;
   offset?: number;
   product_ids?: string[];
@@ -176,6 +180,11 @@ export interface ProductsQueryParams {
 export interface MarketTradesResponse extends PaginatedData<Trade> {
   best_ask: string;
   best_bid: string;
+}
+
+export interface GetProductQueryParams {
+  /** Whether or not to populate view_only with the tradability status of the product. This is only enabled for SPOT products. */
+  get_tradability_status?: boolean;
 }
 
 export class ProductAPI {
@@ -312,9 +321,9 @@ export class ProductAPI {
    *
    * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproduct
    */
-  async getProduct(productId: string): Promise<Product | undefined> {
+  async getProduct(productId: string, params?: GetProductQueryParams): Promise<Product | undefined> {
     const resource = `${ProductAPI.URL.PRODUCTS}/${productId}`;
-    const response = await this.apiClient.get<Product>(resource);
+    const response = await this.apiClient.get<Product>(resource, {params});
     return response.data;
   }
 
