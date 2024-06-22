@@ -1,10 +1,10 @@
 # Coinbase API
 
-Unofficial Coinbase API for Node.js, written in TypeScript and covered by tests. Covers both the [Advanced Trade API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome) & [Sign In With Coinbase API](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/welcome)
+Unofficial Coinbase API for Node.js, written in TypeScript and covered by tests. Covers both the [Advanced Trade API](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) & [Sign In With Coinbase API](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/welcome)
 
 ## Motivation
 
-The purpose of this [coinbase-advanced-node](https://www.npmjs.com/package/coinbase-advanced-node) package is to maintain a recent Coinbase API for Node.js with type safety through TypeScript. This project began as a fork of [coinbase-pro-node](https://github.com/bennycode/coinbase-pro-node) in efforts to provide a smooth transition for anyone migrating to the [Advanced Trade API](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome) due to the deprecation of the former [Exchange/Pro API](https://docs.cloud.coinbase.com/exchange/docs/welcome).
+The purpose of this [coinbase-advanced-node](https://www.npmjs.com/package/coinbase-advanced-node) package is to maintain a recent Coinbase API for Node.js with type safety through TypeScript. This project began as a fork of [coinbase-pro-node](https://github.com/bennycode/coinbase-pro-node) in efforts to provide a smooth transition for anyone migrating to the [Advanced Trade API](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) due to the deprecation of the former [Exchange/Pro API](https://docs.cloud.coinbase.com/exchange/docs/welcome).
 
 ## Features
 
@@ -50,15 +50,15 @@ const client = new Coinbase(creds);
 
 ## Authentication Schemes
 
-All Advanced Trade & SIWC API calls require authentication, with the exception of the `product` & `time` API'S which are public. All websocket channels minus the `user` channel are public as well. Coinbase has multiple authentication schemes available for different APIs, all schemes are supported in this library. Click [here](https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth) for more info.
+All Advanced Trade & SIWC API calls require authentication, with the exception of the `product` & `time` API'S which are public. All websocket channels minus the `user` channel are public as well. Coinbase has multiple authentication schemes available for different APIs, all schemes are supported in this library. Click [here](https://docs.cdp.coinbase.com/advanced-trade/docs/security) for more info.
 
 ## Usage
 
 The [demo section](#demos) provides many examples on how to use "coinbase-advanced-node". For a quick start, below is a simple example for a REST request
 
-All authentication methods require that you obtain correct permissions (scopes) to access different API endpoints. Read more about scopes [here](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/scopes)
+All authentication methods require that you obtain correct permissions (scopes) to access different API endpoints. Read more about scopes [here](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/scopes)
 
-For [Advanced Trade](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome) orders, use the `order` API. The `buy` & `sell` API's exposed are part of the [Sign In With Coinbase API](https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/welcome) which have different capabilities and fee structures
+For [Advanced Trade](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) orders, use the `order` API. The `buy` & `sell` API's exposed are part of the [Sign In With Coinbase API](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/welcome) which have different capabilities and fee structures
 
 ### REST Example
 
@@ -80,7 +80,7 @@ cloudClient.rest.product.getProducts().then(prods => {
 
 // Legacy API keys and OAuth are supported in
 // SIWC API's and some of the Advance Trade API's
-// https://docs.cloud.coinbase.com/advanced-trade-api/docs/auth
+// https://docs.cdp.coinbase.com/advanced-trade/docs/auth
 
 // Legacy API Keys can be generated here:
 // https://www.coinbase.com/settings/api
@@ -96,7 +96,7 @@ legacyClient.rest.account.listAccounts().then(accounts => {
 });
 
 // View OAuth setup info here
-// https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/sign-in-with-coinbase-integration#registering-oauth2-client
+// https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/sign-in-with-coinbase-integration#registering-oauth2-client
 const oauth = {
   oauthToken: 'ej09joiunasgukddd09ujoh2i4r874nkjnk;lajs;dlfjaljhfds;sdhjfsdf=',
 };
@@ -110,7 +110,7 @@ oauthClient.rest.account.listCoinbaseAccounts().then(accounts => {
 
 ## Two Factor Authentication
 
-OAuth2 authentication requires two factor authentication when debiting funds with the `wallet:transactions:send` scope. When 2FA is required, the API will respond with a `402` status and two_factor_required error. To successfully complete the request, you must make the same request again with the user's 2FA token in the `CB-2FA-TOKEN` header together with the current access token. https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/sign-in-with-coinbase-2fa
+OAuth2 authentication requires two factor authentication when debiting funds with the `wallet:transactions:send` scope. When 2FA is required, the API will respond with a `402` status and two_factor_required error. To successfully complete the request, you must make the same request again with the user's 2FA token in the `CB-2FA-TOKEN` header together with the current access token. https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/sign-in-with-coinbase-2fa
 
 ```typescript
 // Example
@@ -224,7 +224,7 @@ The following commits will help you getting started quickly with the code base:
 - [Add REST API endpoint](https://github.com/bennycode/coinbase-prod-node/commit/9920c2f4343985c349b68e2a47d7fe2c42e23e34)
 - [Add REST API endpoint (with fixtures)](https://github.com/bennycode/coinbase-pro-node/commit/8a150fecb7d32b7b7cd39a8109985f665aaee26e)
 
-All resources can be found in the [Coinbase Advance Trade API reference](https://docs.cloud.coinbase.com/advanced-trade-api/docs/welcome). For the latest updates, check [Coinbase's API Changelog](https://docs.cloud.coinbase.com/advanced-trade-api/docs/changelog).
+All resources can be found in the [Coinbase Advance Trade API reference](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome). For the latest updates, check [Coinbase's API Changelog](https://docs.cdp.coinbase.com/advanced-trade/docs/changelog).
 
 ## License
 

@@ -200,7 +200,7 @@ export class ProductAPI {
    *
    * @param productId - Representation for base and counter
    * @param [params] - Desired timespan
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getcandles
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getcandles
    */
   async getCandles(productId: string, params: HistoricRateRequest): Promise<Candle[]> {
     const resource = `${ProductAPI.URL.PRODUCTS}/${productId}/candles`;
@@ -310,7 +310,7 @@ export class ProductAPI {
   /**
    * Get trading details for a specified product.
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproduct
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproduct
    */
   async getProduct(productId: string): Promise<Product | undefined> {
     const resource = `${ProductAPI.URL.PRODUCTS}/${productId}`;
@@ -321,7 +321,7 @@ export class ProductAPI {
   /**
    * Get trading details of all available products.
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproducts
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproducts
    */
   async getProducts(params?: ProductsQueryParams): Promise<Product[]> {
     const resource = ProductAPI.URL.PRODUCTS;
@@ -334,7 +334,7 @@ export class ProductAPI {
    *
    * @param productId - Representation for base and counter
    * @param pagination - Pagination field, use of Pagination is deprecated use TimeBasedPagination
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getmarkettrades
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getmarkettrades
    */
   async getTrades(productId: string, pagination?: Pagination | TimeBasedPagination): Promise<MarketTradesResponse> {
     const resource = `${ProductAPI.URL.PRODUCTS}/${productId}/ticker`;
@@ -381,7 +381,7 @@ export class ProductAPI {
    * Get Best Bid/Ask
    *
    * @param productIds - Products to get asks/bids for
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getbestbidask
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getbestbidask
    */
   async getBestAsksAndBids(productIds: string[]): Promise<PriceBook[]> {
     const response = await this.apiClient.get(ProductAPI.URL.BEST_BID_ASK, {
@@ -394,7 +394,7 @@ export class ProductAPI {
    * Get Product Book
    *
    * @param productId - Products to get asks/bids for
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproductbook
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproductbook
    */
   async getProductBook(productId: string, limit?: number): Promise<PriceBook> {
     const params = {limit: limit || 250, product_id: productId};

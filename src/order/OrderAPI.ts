@@ -94,7 +94,7 @@ export interface LimitOrderIOC {
 /** This feature is currently in open Beta and may be taken down to resolve issues during testing.
  *  FOK orders are either fully filled immediately or killed and cannot be postOnly.
  *  FOK orders are validated at most 20% away from mid market in either direction.
- * @see https://docs.cloud.coinbase.com/advanced-trade-api/docs/changelog#2024-apr-16
+ * @see https://docs.cdp.coinbase.com/advanced-trade/docs/changelog#2024-apr-16
  *  */
 export interface LimitFillOrKill {
   limit_limit_fok: {
@@ -105,7 +105,7 @@ export interface LimitFillOrKill {
 
 /** This feature is currently in closed beta and may be taken down to resolve issues during testing.
  *  Bracket is an order type available on Coinbase Advanced that allows users to buy/sell with a limit price while mitigating potential losses in volatile markets
- * @see https://docs.cloud.coinbase.com/advanced-trade-api/docs/changelog#2024-mar-28
+ * @see https://docs.cdp.coinbase.com/advanced-trade/docs/changelog#2024-mar-28 
  *  */
 export interface TriggerBracketGTC {
   trigger_bracket_gtc: {
@@ -117,7 +117,7 @@ export interface TriggerBracketGTC {
 
 /** This feature is currently in closed beta and may be taken down to resolve issues during testing.
  *  Bracket is an order type available on Coinbase Advanced that allows users to buy/sell with a limit price while mitigating potential losses in volatile markets
- * @see https://docs.cloud.coinbase.com/advanced-trade-api/docs/changelog#2024-mar-28
+ * @see https://docs.cdp.coinbase.com/advanced-trade/docs/changelog#2024-mar-28
  *  */
 export interface TriggerBracketGTD {
   trigger_bracket_gtd: {
@@ -181,7 +181,7 @@ export interface CancelOrderResponse {
   success?: boolean;
 }
 
-/** @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_gethistoricalorders */
+/** @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_gethistoricalorders */
 export interface OrderListQueryParam {
   asset_filters?: string[];
   contract_expiry_type?: string;
@@ -312,7 +312,7 @@ export class OrderAPI {
    *
    * @param orderIds - Representation for base and counter
    * @returns A list of ids of the canceled orders
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_cancelorders
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_cancelorders
    */
   async cancelOpenOrders(orderIds?: string | string[]): Promise<CancelOrderResponse[]> {
     const resource = OrderAPI.URL.ORDERS + '/batch_cancel';
@@ -341,7 +341,7 @@ export class OrderAPI {
    *
    * @param data - ClosePositionParams
    * @returns ClosePositionResponse
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_closeposition
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_closeposition
    */
   async closePosition(data: ClosePositionParams): Promise<ClosePositionResponse> {
     const resource = OrderAPI.URL.ORDERS + '/close_position';
@@ -356,7 +356,7 @@ export class OrderAPI {
    * @note Depending on your activity, fetching all data from this endpoint can take very long (measured already 25
    *   seconds!)
    * @param query - Available query parameters (Pagination, Product ID and/or Order Status)
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_gethistoricalorders
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_gethistoricalorders
    */
   async getOrders(query?: OrderListQueryParam): Promise<PaginatedData<Order>> {
     const resource = OrderAPI.URL.ORDERS + '/historical/batch';
@@ -385,7 +385,7 @@ export class OrderAPI {
    * Get a single order by order id from the profile that the API key belongs to.
    *
    * @param orderId - ID of previously placed order
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_gethistoricalorder
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_gethistoricalorder
    */
   async getOrder(orderId: string): Promise<Order | null> {
     const resource = `${OrderAPI.URL.ORDERS}/historical/${orderId}`;
@@ -411,7 +411,7 @@ export class OrderAPI {
    * funds. Once an order is placed, your account funds will be put on hold for the duration of the order.
    *
    * @param newOrder - Order type and parameters
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_postorder
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_postorder
    */
   async placeOrder(newOrder: NewOrder): Promise<CreateOrderResponse> {
     const resource = OrderAPI.URL.ORDERS;
@@ -423,7 +423,7 @@ export class OrderAPI {
    * Edit an order's size (quantity), or price. Only good-till-cancelled (GTC) Limit Orders can be edited.
    *
    * @param data - updates fo the order
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_editorder
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_editorder
    */
   async editOrder(data: EditOrderPaylod): Promise<{errors?: any; success: boolean}> {
     const resource = OrderAPI.URL.ORDERS + '/edit';
@@ -436,7 +436,7 @@ export class OrderAPI {
    * Only limit order types, with time in force type of good-till-cancelled can be edited.
    *
    * @param data - updates fo the order
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeweditorder
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeweditorder
    */
   async editOrderPreview(data: EditOrderPaylod): Promise<{errors?: any; success: boolean}> {
     const resource = OrderAPI.URL.ORDERS + '/edit_preview';
@@ -448,7 +448,7 @@ export class OrderAPI {
    * Preview the results of an order request before sending.
    *
    * @param data - order info
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_previeworder
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_previeworder
    */
   async previewOrder(data: PreviewOrderPayload): Promise<PreviewOrderResponse> {
     const resource = OrderAPI.URL.ORDERS + '/preview';

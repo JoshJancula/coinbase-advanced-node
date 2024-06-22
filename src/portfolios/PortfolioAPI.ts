@@ -246,7 +246,7 @@ export class PortfolioAPI {
    *
    * @param params - Object containing portfolio_type params, is left as an object that is direct passed so if future params
    * are added the object could be passed as any.
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getportfolios
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getportfolios
    */
   async getPortfolios(params?: {portfolio_type: PortfolioTypes}): Promise<CoinbasePortfolio[]> {
     const resource = `/brokerage/portfolios`;
@@ -260,7 +260,7 @@ export class PortfolioAPI {
    *
    * @param name - name for the portfolio
    * are added the object could be passed as any.
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createportfolio
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_createportfolio
    */
   async createPortfolio(name: string): Promise<CoinbasePortfolio> {
     const resource = `/brokerage/portfolios`;
@@ -273,7 +273,7 @@ export class PortfolioAPI {
    * This endpoint requires the "transfer" permission (for the source portfolio).
    *
    * @param data - info on the transfer
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_moveportfoliofunds
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_moveportfoliofunds
    */
   async transferFunds(data: TransferFundsRequest): Promise<{
     source_portfolio_uuid: string;
@@ -289,7 +289,7 @@ export class PortfolioAPI {
    * This endpoint requires the "view" permission (for that portfolio).
    *
    * @param id - id of the portfolio
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getportfoliobreakdown
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getportfoliobreakdown
    */
   async getPortfolioBreakdown(id: string): Promise<PortfolioBreakdown> {
     const resource = `/brokerage/portfolios/${id}`;
@@ -302,7 +302,7 @@ export class PortfolioAPI {
    * This endpoint requires the "trade" permission (for that portfolio).
    *
    * @param id - id of the portfolio to delete
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_deleteportfolio
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_deleteportfolio
    */
   async deletePortfolio(id: string): Promise<{}> {
     const resource = `/brokerage/portfolios/${id}`;
@@ -316,7 +316,7 @@ export class PortfolioAPI {
    *
    * @param id - id of the portfolio
    * @param updatePayload -  Object containing updates is unaltered when proxied
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_editportfolio
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_editportfolio
    */
   async editPortfolio(id: string, updatePayload: {name: string}): Promise<CoinbasePortfolio> {
     const resource = `/brokerage/portfolios/${id}`;
@@ -327,7 +327,7 @@ export class PortfolioAPI {
   /**
    * Get Futures Balance Summary
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmbalancesummary
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmbalancesummary
    */
   async getFuturesBalanceSummary(): Promise<FuturesBalanceSummary> {
     const resource = `/brokerage/cfm/balance_summary`;
@@ -338,7 +338,7 @@ export class PortfolioAPI {
   /**
    * List Futures Positions
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmpositions
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmpositions
    */
   async listFuturesPositions(): Promise<FuturesPosition[]> {
     const resource = `/brokerage/cfm/positions`;
@@ -350,7 +350,7 @@ export class PortfolioAPI {
    * Get Futures Position
    *
    * @param id - id of the position
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmposition
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmposition
    */
   async getFuturesPosition(id: string): Promise<FuturesPosition> {
     const resource = `/brokerage/cfm/positions/${id}`;
@@ -362,7 +362,7 @@ export class PortfolioAPI {
    * Schedule Futures Sweep
    *
    * @param data - the sweep data
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_schedulefcmsweep
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_schedulefcmsweep
    */
   async scheduleFuturesSweep(data: {usd_amount: string}): Promise<{success: boolean}> {
     const resource = `/brokerage/cfm/sweeps/schedule`;
@@ -373,7 +373,7 @@ export class PortfolioAPI {
   /**
    * List Futures Sweeps
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmsweeps
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmsweeps
    */
   async listFuturesSweeps(): Promise<FuturesSweep[]> {
     const resource = `/brokerage/cfm/sweeps`;
@@ -384,7 +384,7 @@ export class PortfolioAPI {
   /**
    * Cancel Pending Futures Sweep
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_cancelfcmsweep
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_cancelfcmsweep
    */
   async cancelPendingSweep(): Promise<{success: boolean}> {
     const resource = `/brokerage/cfm/sweeps`;
@@ -396,7 +396,7 @@ export class PortfolioAPI {
    * Allocate Portfolio
    *
    * @param data - aloocation data
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_allocateportfolio
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_allocateportfolio
    */
   async allocatePortfolio(data: AllocatePortfolioPayload): Promise<{}> {
     const resource = `/brokerage/intx/allocate`;
@@ -408,7 +408,7 @@ export class PortfolioAPI {
    * Get Perpetuals Portfolio Summary
    *
    * @param id - The unique identifier for your perpetuals portfolio.
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getintxportfoliosummary
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxportfoliosummary
    */
   async getPerpetualsPortfolioSummary(id: string): Promise<PerpetualsPortfolioSummary> {
     const resource = `/brokerage/intx/portfolio/${id}`;
@@ -420,7 +420,7 @@ export class PortfolioAPI {
    * List Perpetuals Positions
    *
    * @param id -The unique identifier for your perpetuals portfolio.
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getintxpositions
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxpositions
    */
   async listPerpetualsPositions(
     id: string
@@ -435,7 +435,7 @@ export class PortfolioAPI {
    *
    * @param id - The unique identifier for your perpetuals portfolio.
    * @param symbol - The product_id for which you want to get the position. e.g. 'BTC-PERP-INTX'
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getintxposition
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxposition
    */
   async getPerpetualsPosition(id: string, symbol: string): Promise<PerpetualsPosition> {
     const resource = `/brokerage/intx/positions/${id}/${symbol}`;

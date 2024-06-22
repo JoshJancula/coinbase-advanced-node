@@ -463,7 +463,7 @@ export class WebSocketClient extends EventEmitter {
   async sendMessage(message: WebSocketRequest): Promise<void> {
     /**
      * You gotta auth for user
-     * @see https://docs.cloud.coinbase.com/advanced-trade-api/docs/ws-channels
+     * @see https://docs.cdp.coinbase.com/advanced-trade/docs/ws-channels
      */
     const signature = await this.signRequest({
       httpMethod: '',

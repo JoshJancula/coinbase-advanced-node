@@ -31,7 +31,7 @@ export class AddressAPI {
    *
    * @param account - account id the address is linked to
    * @param pagination - Pagination field
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-addresses#list-addresses
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-addresses#list-addresses
    */
   async listAddresses(account: string, pagination?: Pagination): Promise<PaginatedData<AddressResource>> {
     return this.sharedService.queryAll<AddressResource>(account, pagination);
@@ -43,7 +43,7 @@ export class AddressAPI {
    *
    * @param accountId - id of the account
    * @param addressId - id of the requested resource
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-addresses#http-request-1
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-addresses#http-request-1
    */
   async getAddress(accountId: string, depositId: string): Promise<AddressResource> {
     return this.sharedService.getById<AddressResource>(accountId, depositId);
@@ -56,7 +56,7 @@ export class AddressAPI {
    * @param accountId - address id the address is linked to
    * @param addressId - id of the requested resource
    * @param pagination - Pagination field
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-addresses#list-transactions
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-addresses#list-transactions
    */
   async getAddressTransactions(
     accountId: string,
@@ -76,7 +76,7 @@ export class AddressAPI {
    * @param accountId - the accounts id
    * @param name - a name for this address
    *
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-addresses#create-address
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-addresses#create-address
    */
   async createAddress(accountId: string, name?: string): Promise<AddressResource> {
     const resource = `accounts/${accountId}/addresses`;

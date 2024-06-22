@@ -26,7 +26,7 @@ export class TimeAPI {
    * Get the server time from Coinbase Pro API. It has been reported that sometimes the return value is a string:
    * https://github.com/bennycode/coinbase-pro-node/issues/354
    *
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-time
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-time
    */
   async getTime(): Promise<TimeSkew> {
     const client = this.getClient(this.siwcUrl);
@@ -38,7 +38,7 @@ export class TimeAPI {
    * Get the current time from the Coinbase Advanced API.
    * This endpoint requires authentication
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getunixtime
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getunixtime
    */
   async getAdvanceApiTime(): Promise<AdvanceApiTime> {
     const client = this.getClient(this.advTradeUrl);

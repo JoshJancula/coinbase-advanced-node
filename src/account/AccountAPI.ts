@@ -95,7 +95,7 @@ export class AccountAPI {
    * Get information for a single account.
    *
    * @param accountId - Account ID is the Account.uuid
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getaccount
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getaccount
    */
   async getAccount(accountId: string): Promise<Account> {
     const resource = `${AccountAPI.URL.ACCOUNTS}/${accountId}`;
@@ -107,7 +107,7 @@ export class AccountAPI {
    * Get information for a single account. API key must belong to the same profile as the account.
    *
    * @param accountId - Account ID is either Account.uuid || Account.currency || CoinbaseAccoount.currency.code
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-accounts#http-request-1
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-accounts/#show-account
    */
   async getCoinbaseAccount(accountId: string): Promise<CoinbaseAccount> {
     const resource = `${AccountAPI.URL.COINBASE_ACCOUNT}/${accountId}`;
@@ -118,7 +118,7 @@ export class AccountAPI {
   /**
    * Get a list of trading accounts from the profile of the API key.
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getaccounts
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getaccounts
    */
   async listAccounts(pagination?: Pagination): Promise<PaginatedData<Account>> {
     const resource = AccountAPI.URL.ACCOUNTS;
@@ -141,7 +141,7 @@ export class AccountAPI {
   /**
    * Get a list of your coinbase accounts.
    *
-   * @see https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getcoinbaseaccounts
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-accounts/#list-accounts
    */
   async listCoinbaseAccounts(pagination?: Pagination): Promise<PaginatedData<CoinbaseAccount>> {
     const resource = AccountAPI.URL.COINBASE_ACCOUNT;

@@ -91,7 +91,7 @@ export class FillAPI {
    * Get a list of recent fills associated to the API key
    *
    * @param query - query to filter results
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfills
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfills
    */
   async getFills(query: FillApiQueryParams): Promise<PaginatedData<Fill>> {
     const resource = FillAPI.URL.FILLS;
