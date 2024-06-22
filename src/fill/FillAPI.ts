@@ -27,6 +27,7 @@ export interface Fill {
   order_id: UUID_V4;
   price: string;
   product_id: string;
+  retail_portfolio_id?: string;
   sequence_timestamp: ISO_8601_MS_UTC;
   side: OrderSide;
   size: string;
@@ -43,6 +44,7 @@ export interface FillApiQueryParams {
   limit?: number; // Maximum number of fills to return in response. Defaults to 100.
   order_id?: string;
   product_id?: string;
+  retail_portfolio_id?: string;
   start_sequence_timestamp?: ISO_8601_MS_UTC;
 }
 
