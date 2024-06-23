@@ -237,6 +237,34 @@ export interface PerpetualPositionBreakdown {
   };
 }
 
+export enum IntradayMarginSettings {
+  INTRADAY = 'INTRADAY',
+  STANDARD = 'STANDARD',
+  UNSPECIFIED = 'UNSPECIFIED',
+}
+
+export interface IntradayMarginSettingsPayload {
+  intraday_margin_setting: string;
+}
+
+export enum MarginWindowTypes {
+  INTRADAY = 'INTRADAY',
+  OVERNIGHT = 'OVERNIGHT',
+  TRANSITION = 'TRANSITION',
+  UNSPECIFIED = 'UNSPECIFIED',
+  WEEKEND = 'WEEKEND',
+}
+
+export interface MarginWindow {
+  end_time: string;
+  margin_window_type: MarginWindowTypes;
+}
+export interface CurrentMarginWindowInfo {
+  is_intraday_margin_enrollment_killswitch_enabled: boolean;
+  is_intraday_margin_killswitch_enabled: boolean;
+  margin_window: MarginWindow;
+}
+
 export class PortfolioAPI {
   constructor(private readonly apiClient: AxiosInstance) {}
 
@@ -441,5 +469,28 @@ export class PortfolioAPI {
     const resource = `/brokerage/intx/positions/${id}/${symbol}`;
     const response = await this.apiClient.get(resource);
     return response.data.position;
+  }
+
+  /**
+   * Set Intraday Margin Setting
+   *
+   * @param data - request body see IntradayMarginSettingsPayload
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_setintradaymarginsetting/
+   */
+  async setIntradayMarginSetting(data: IntradayMarginSettingsPayload): Promise<{}> {
+    const resource = `/brokerage/cfm/intraday/margin_setting`;
+    const response = await this.apiClient.post(resource, data);
+    return response.data;
+  }
+
+  /**
+   * Get Current Margin Window
+   *
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getcurrentmarginwindow/
+   */
+  async getCurrentMarginWindow(): Promise<CurrentMarginWindowInfo> {
+    const resource = `brokerage/cfm/intraday/current_margin_window`;
+    const response = await this.apiClient.get(resource);
+    return response.data;
   }
 }
