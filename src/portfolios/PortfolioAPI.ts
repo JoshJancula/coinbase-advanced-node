@@ -89,6 +89,24 @@ export interface PortfolioBreakdown {
   spot_positions: SpotPosition[];
 }
 
+export enum MarginLevels {
+  BASE = 'BASE',
+  DANGER = 'DANGER',
+  LIQUIDATION = 'LIQUIDATION',
+  UNSPECIFIED = 'UNSPECIFIED',
+  WARNING = 'WARNING',
+}
+
+export interface MarginWindowMeasure {
+  futures_buying_power: string;
+  initial_margin: string;
+  liquidation_buffer: string;
+  maintenance_margin: string;
+  margin_level: MarginLevels;
+  margin_window_type: MarginWindowTypes;
+  total_hold: string;
+}
+
 export interface FuturesBalanceSummary {
   available_margin: Balance;
   cbi_usd_balance: Balance;
@@ -96,9 +114,11 @@ export interface FuturesBalanceSummary {
   daily_realized_pnl: Balance;
   futures_buying_power: Balance;
   initial_margin: Balance;
+  intraday_margin_window_measure: MarginWindowMeasure;
   liquidation_buffer_amount: Balance;
   liquidation_buffer_percentage: string;
   liquidation_threshold: Balance;
+  overnight_margin_window_measure: MarginWindowMeasure;
   total_open_orders_hold_amount: Balance;
   total_usd_balance: Balance;
   unrealized_pnl: Balance;
