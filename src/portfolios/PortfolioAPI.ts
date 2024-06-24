@@ -166,7 +166,7 @@ export enum PerpetualLiquidationStatusTypes {
   PORTFOLIO_LIQUIDATION_STATUS_UNSPECIFIED = 'PORTFOLIO_LIQUIDATION_STATUS_UNSPECIFIED',
 }
 
-export interface PerpetualsPortfolioSummary {
+export interface PerpetualsPortfolio {
   accrued_interest: string;
   borrow: string;
   buying_power: Balance;
@@ -188,6 +188,16 @@ export interface PerpetualsPortfolioSummary {
   rolling_debt: string;
   total_balance: Balance;
   unrealized_pnl: Balance;
+}
+
+export interface PerpetualsPortfolioSummary {
+  portfolios: PerpetualsPortfolio[];
+  summary: {
+    buying_power: Balance;
+    max_withdrawal_amount: Balance;
+    total_balance: Balance;
+    unrealized_pnl: Balance;
+  };
 }
 
 export interface PortfolioAssetDetails {
@@ -223,8 +233,17 @@ export interface PortfolioBalanceResponse {
   };
 }
 
+export interface ListPerpetualPositionsResponse {
+  positions: PerpetualsPosition[];
+  summary: {
+    aggregated_pnl: Balance;
+  };
+}
+
 export interface PerpetualsPosition {
+  aggregated_pnl: Balance;
   buy_order_size: string;
+  entry_vwap: Balance;
   im_contribution: string;
   im_notional: Balance;
   leverage: string;
@@ -503,7 +522,7 @@ export class PortfolioAPI {
   async getPerpetualsPortfolioSummary(id: string): Promise<PerpetualsPortfolioSummary> {
     const resource = `/brokerage/intx/portfolio/${id}`;
     const response = await this.apiClient.get(resource);
-    return response.data.summary;
+    return response.data;
   }
 
   /**
@@ -512,9 +531,7 @@ export class PortfolioAPI {
    * @param id -The unique identifier for your perpetuals portfolio.
    * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxpositions
    */
-  async listPerpetualsPositions(
-    id: string
-  ): Promise<{portfolio_summary: PerpetualsPortfolioSummary; positions: PerpetualsPosition[]}> {
+  async listPerpetualsPositions(id: string): Promise<ListPerpetualPositionsResponse> {
     const resource = `/brokerage/intx/positions/${id}`;
     const response = await this.apiClient.get(resource);
     return response.data;
