@@ -11,6 +11,7 @@
       "commission": "1.25",
       "product_id": "BTC-USD",
       "sequence_timestamp": "2021-05-31T09:58:59Z",
+      "retail_portfolio_id": "xxxxxxxxx-xxxxx-xxxxxxxxx",
       "liquidity_indicator": "UNKNOWN_LIQUIDITY_INDICATOR",
       "size_in_quote": false,
       "user_id": "3333-333333-3333333",

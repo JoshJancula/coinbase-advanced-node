@@ -44,7 +44,7 @@ export class SellAPI {
    *
    * @param account - account id of the purchase
    * @param pagination - Pagination field
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-sells#list-sells
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-sells#list-sells
    */
   async listSells(account: string, pagination?: Pagination): Promise<PaginatedData<SellInformation>> {
     return this.sharedService.queryAll<SellInformation>(account, pagination);
@@ -65,7 +65,7 @@ export class SellAPI {
    * Place sell order
    *
    * @param data - Information for this sell
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-sells#place-sell-order
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-sells#place-sell-order
    */
   async createSell(data: SIWCOrder): Promise<SellInformation> {
     return this.sharedService.createNew<SellInformation>(data);
@@ -76,7 +76,7 @@ export class SellAPI {
    *
    * @param accountId - The account withdrawal is pulling from
    * @param sellId - The id of the transaction
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-sells#commit-a-sell
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-sells#commit-a-sell
    */
   async commitSell(accountId: string, sellId: string): Promise<SellInformation> {
     return this.sharedService.commitPending<SellInformation>(accountId, sellId);

@@ -124,7 +124,7 @@ export class ConvertAPI {
    * Trades are valid for 10 minutes after the quote is created.
    *
    * @param data - payload for creating the quote
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createconvertquote
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_createconvertquote
    */
   async createQuote(data: CreateConvertQuotePayload): Promise<ConversionTrade> {
     const resource = `/brokerage/convert/quote`;
@@ -137,7 +137,7 @@ export class ConvertAPI {
    *
    * @param tradeId - The ID of the trade to commit
    * @param data - Object containing the currency of the account to convert to / from, e.g. USD => USDC
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_commitconverttrade
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_commitconverttrade
    */
   async commitConvertTrade(
     tradeId: string,
@@ -153,7 +153,7 @@ export class ConvertAPI {
    *
    * @param tradeId - The ID of the trade to commit
    * @param data - Object containing the currency of the account to convert to / from, e.g. USD => USDC
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getconverttrade
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getconverttrade
    */
   async getConvertTrade(
     tradeId: string,

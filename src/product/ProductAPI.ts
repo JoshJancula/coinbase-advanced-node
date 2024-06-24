@@ -11,6 +11,7 @@ import {
 } from '../payload/common';
 import {CandleBucketUtil} from './CandleBucketUtil';
 import {RESTClient} from '..';
+import {formatPaginationFromResponse} from '../util/shared-request';
 
 export interface Product {
   auction_mode: boolean;
@@ -36,6 +37,8 @@ export interface Product {
   quote_name: string;
   status: string;
   trading_disabled: boolean;
+  /** Reflects whether an FCM product has expired. For SPOT, set get_tradability_status to get a return value here. Defaulted to false for all other product types. */
+  view_only?: boolean;
   volume_24h: string;
   volume_percentage_change_24h: string;
   watched: boolean;
@@ -167,6 +170,8 @@ export enum ProductEvent {
 
 export interface ProductsQueryParams {
   contract_expiry_type?: string;
+  /** Whether or not to populate view_only with the tradability status of the product. This is only enabled for SPOT products. */
+  get_tradability_status?: boolean;
   limit?: number;
   offset?: number;
   product_ids?: string[];
@@ -176,6 +181,11 @@ export interface ProductsQueryParams {
 export interface MarketTradesResponse extends PaginatedData<Trade> {
   best_ask: string;
   best_bid: string;
+}
+
+export interface GetProductQueryParams {
+  /** Whether or not to populate view_only with the tradability status of the product. This is only enabled for SPOT products. */
+  get_tradability_status?: boolean;
 }
 
 export class ProductAPI {
@@ -200,7 +210,7 @@ export class ProductAPI {
    *
    * @param productId - Representation for base and counter
    * @param [params] - Desired timespan
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getcandles
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getcandles
    */
   async getCandles(productId: string, params: HistoricRateRequest): Promise<Candle[]> {
     const resource = `${ProductAPI.URL.PRODUCTS}/${productId}/candles`;
@@ -310,18 +320,18 @@ export class ProductAPI {
   /**
    * Get trading details for a specified product.
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproduct
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproduct
    */
-  async getProduct(productId: string): Promise<Product | undefined> {
+  async getProduct(productId: string, params?: GetProductQueryParams): Promise<Product | undefined> {
     const resource = `${ProductAPI.URL.PRODUCTS}/${productId}`;
-    const response = await this.apiClient.get<Product>(resource);
+    const response = await this.apiClient.get<Product>(resource, {params});
     return response.data;
   }
 
   /**
    * Get trading details of all available products.
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproducts
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproducts
    */
   async getProducts(params?: ProductsQueryParams): Promise<Product[]> {
     const resource = ProductAPI.URL.PRODUCTS;
@@ -334,7 +344,7 @@ export class ProductAPI {
    *
    * @param productId - Representation for base and counter
    * @param pagination - Pagination field, use of Pagination is deprecated use TimeBasedPagination
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getmarkettrades
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getmarkettrades
    */
   async getTrades(productId: string, pagination?: Pagination | TimeBasedPagination): Promise<MarketTradesResponse> {
     const resource = `${ProductAPI.URL.PRODUCTS}/${productId}/ticker`;
@@ -344,11 +354,7 @@ export class ProductAPI {
       best_ask: response.data.best_ask,
       best_bid: response.data.best_bid,
       data: response.data.trades,
-      pagination: {
-        after: '0',
-        before: response.data.num_products,
-        has_next: false,
-      },
+      pagination: formatPaginationFromResponse(response),
     };
   }
 
@@ -381,7 +387,7 @@ export class ProductAPI {
    * Get Best Bid/Ask
    *
    * @param productIds - Products to get asks/bids for
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getbestbidask
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getbestbidask
    */
   async getBestAsksAndBids(productIds: string[]): Promise<PriceBook[]> {
     const response = await this.apiClient.get(ProductAPI.URL.BEST_BID_ASK, {
@@ -394,7 +400,7 @@ export class ProductAPI {
    * Get Product Book
    *
    * @param productId - Products to get asks/bids for
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getproductbook
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getproductbook
    */
   async getProductBook(productId: string, limit?: number): Promise<PriceBook> {
     const params = {limit: limit || 250, product_id: productId};

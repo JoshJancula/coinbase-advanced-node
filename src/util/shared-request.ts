@@ -1,5 +1,5 @@
 import {AxiosInstance} from 'axios';
-import {NewSIWCTransaction, PaginatedData, Pagination} from '../payload';
+import {NewSIWCTransaction, PaginatedData, Pagination, UniversalPagination} from '../payload';
 import {stringify} from 'qs';
 
 export const serializeParamsArray = (params: any): string => {
@@ -7,8 +7,10 @@ export const serializeParamsArray = (params: any): string => {
 };
 
 export const formatPaginationIntoParams = (pagination: Pagination | undefined, siwc = false, params = {}): Object => {
-  if (pagination?.after) {
-    const d = siwc ? {starting_after: pagination.after} : {cursor: pagination.after};
+  if (pagination?.after || pagination?.cursor) {
+    const d = siwc
+      ? {starting_after: pagination.after || pagination.cursor}
+      : {cursor: pagination.after || pagination.cursor};
     Object.assign(params, d);
   }
   if (pagination?.before) {
@@ -21,6 +23,28 @@ export const formatPaginationIntoParams = (pagination: Pagination | undefined, s
     Object.assign(params, {limit: 250});
   }
   return params;
+};
+
+export const formatPaginationFromResponse = (response: any): UniversalPagination => {
+  const pagination = {
+    after: response?.data?.pagination?.starting_after || response?.data?.cursor || undefined,
+    before: response?.data?.pagination?.ending_before || undefined,
+    cursor: response?.data?.cursor || undefined,
+    ending_before: response?.data?.pagination?.ending_before || undefined,
+    has_next: response?.data?.has_next || !!response?.data?.pagination?.next_uri || false,
+    limit: response?.data?.pagination?.limit,
+    next_uri: response?.data?.pagination?.next_uri || undefined,
+    order: response?.data?.pagination?.order || undefined,
+    size: response?.data?.size ? Number(response.data.size) : undefined,
+    starting_after: response?.data?.pagination?.starting_after || response?.data?.cursor || undefined,
+  };
+  return Object.entries(pagination)
+    .filter(([_key, value]) => value !== undefined)
+    .reduce((obj, [key, value]) => {
+      // @ts-ignore
+      obj[key] = value;
+      return obj;
+    }, {});
 };
 
 export class SharedRequestService {
@@ -39,11 +63,7 @@ export class SharedRequestService {
     });
     return {
       data: response.data.data,
-      pagination: {
-        after: response.data.pagination.starting_after || '0',
-        before: response.data.pagination.ending_before || '0',
-        has_next: response.data.has_next || false,
-      },
+      pagination: formatPaginationFromResponse(response),
     };
   }
 

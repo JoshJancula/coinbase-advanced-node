@@ -89,6 +89,24 @@ export interface PortfolioBreakdown {
   spot_positions: SpotPosition[];
 }
 
+export enum MarginLevels {
+  BASE = 'BASE',
+  DANGER = 'DANGER',
+  LIQUIDATION = 'LIQUIDATION',
+  UNSPECIFIED = 'UNSPECIFIED',
+  WARNING = 'WARNING',
+}
+
+export interface MarginWindowMeasure {
+  futures_buying_power: string;
+  initial_margin: string;
+  liquidation_buffer: string;
+  maintenance_margin: string;
+  margin_level: MarginLevels;
+  margin_window_type: MarginWindowTypes;
+  total_hold: string;
+}
+
 export interface FuturesBalanceSummary {
   available_margin: Balance;
   cbi_usd_balance: Balance;
@@ -96,9 +114,11 @@ export interface FuturesBalanceSummary {
   daily_realized_pnl: Balance;
   futures_buying_power: Balance;
   initial_margin: Balance;
+  intraday_margin_window_measure: MarginWindowMeasure;
   liquidation_buffer_amount: Balance;
   liquidation_buffer_percentage: string;
   liquidation_threshold: Balance;
+  overnight_margin_window_measure: MarginWindowMeasure;
   total_open_orders_hold_amount: Balance;
   total_usd_balance: Balance;
   unrealized_pnl: Balance;
@@ -146,7 +166,7 @@ export enum PerpetualLiquidationStatusTypes {
   PORTFOLIO_LIQUIDATION_STATUS_UNSPECIFIED = 'PORTFOLIO_LIQUIDATION_STATUS_UNSPECIFIED',
 }
 
-export interface PerpetualsPortfolioSummary {
+export interface PerpetualsPortfolio {
   accrued_interest: string;
   borrow: string;
   buying_power: Balance;
@@ -170,8 +190,60 @@ export interface PerpetualsPortfolioSummary {
   unrealized_pnl: Balance;
 }
 
+export interface PerpetualsPortfolioSummary {
+  portfolios: PerpetualsPortfolio[];
+  summary: {
+    buying_power: Balance;
+    max_withdrawal_amount: Balance;
+    total_balance: Balance;
+    unrealized_pnl: Balance;
+  };
+}
+
+export interface PortfolioAssetDetails {
+  account_collateral_limit: string;
+  asset_icon_url: string;
+  asset_id: string;
+  asset_name: string;
+  asset_uuid: string;
+  collateral_weight: string;
+  ecosystem_collateral_limit_breached: boolean;
+  status: string;
+  supported_networks_enabled: boolean;
+}
+
+export interface PortfolioBalance {
+  asset: PortfolioAssetDetails;
+  collateral_value: string;
+  collateral_weight: string;
+  hold: string;
+  loan: string;
+  loan_collateral_requirement_usd: string;
+  max_withdraw_amount: string;
+  pledged_quantity: string;
+  quantity: string;
+  transfer_hold: string;
+}
+
+export interface PortfolioBalanceResponse {
+  portfolio_balances: {
+    balances: PortfolioBalance[];
+    is_margin_limit_reached: boolean;
+    portfolio_uuid: string;
+  };
+}
+
+export interface ListPerpetualPositionsResponse {
+  positions: PerpetualsPosition[];
+  summary: {
+    aggregated_pnl: Balance;
+  };
+}
+
 export interface PerpetualsPosition {
+  aggregated_pnl: Balance;
   buy_order_size: string;
+  entry_vwap: Balance;
   im_contribution: string;
   im_notional: Balance;
   leverage: string;
@@ -237,6 +309,43 @@ export interface PerpetualPositionBreakdown {
   };
 }
 
+export enum IntradayMarginSettings {
+  INTRADAY = 'INTRADAY',
+  STANDARD = 'STANDARD',
+  UNSPECIFIED = 'UNSPECIFIED',
+}
+
+export interface IntradayMarginSettingsPayload {
+  intraday_margin_setting: IntradayMarginSettings;
+}
+
+export enum MarginWindowTypes {
+  INTRADAY = 'INTRADAY',
+  OVERNIGHT = 'OVERNIGHT',
+  TRANSITION = 'TRANSITION',
+  UNSPECIFIED = 'UNSPECIFIED',
+  WEEKEND = 'WEEKEND',
+}
+
+export interface MarginWindow {
+  end_time: string;
+  margin_window_type: MarginWindowTypes;
+}
+export interface CurrentMarginWindowInfo {
+  is_intraday_margin_enrollment_killswitch_enabled: boolean;
+  is_intraday_margin_killswitch_enabled: boolean;
+  margin_window: MarginWindow;
+}
+
+export interface SetMultiAssetCollateralPayload {
+  multi_asset_collateral_enabled: boolean;
+  portfolio_uuid: string;
+}
+
+export interface SetMultiAssetCollateralResponse {
+  multi_asset_collateral_enabled: boolean;
+}
+
 export class PortfolioAPI {
   constructor(private readonly apiClient: AxiosInstance) {}
 
@@ -246,7 +355,7 @@ export class PortfolioAPI {
    *
    * @param params - Object containing portfolio_type params, is left as an object that is direct passed so if future params
    * are added the object could be passed as any.
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getportfolios
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getportfolios
    */
   async getPortfolios(params?: {portfolio_type: PortfolioTypes}): Promise<CoinbasePortfolio[]> {
     const resource = `/brokerage/portfolios`;
@@ -260,7 +369,7 @@ export class PortfolioAPI {
    *
    * @param name - name for the portfolio
    * are added the object could be passed as any.
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_createportfolio
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_createportfolio
    */
   async createPortfolio(name: string): Promise<CoinbasePortfolio> {
     const resource = `/brokerage/portfolios`;
@@ -273,7 +382,7 @@ export class PortfolioAPI {
    * This endpoint requires the "transfer" permission (for the source portfolio).
    *
    * @param data - info on the transfer
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_moveportfoliofunds
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_moveportfoliofunds
    */
   async transferFunds(data: TransferFundsRequest): Promise<{
     source_portfolio_uuid: string;
@@ -289,7 +398,7 @@ export class PortfolioAPI {
    * This endpoint requires the "view" permission (for that portfolio).
    *
    * @param id - id of the portfolio
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getportfoliobreakdown
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getportfoliobreakdown
    */
   async getPortfolioBreakdown(id: string): Promise<PortfolioBreakdown> {
     const resource = `/brokerage/portfolios/${id}`;
@@ -302,7 +411,7 @@ export class PortfolioAPI {
    * This endpoint requires the "trade" permission (for that portfolio).
    *
    * @param id - id of the portfolio to delete
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_deleteportfolio
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_deleteportfolio
    */
   async deletePortfolio(id: string): Promise<{}> {
     const resource = `/brokerage/portfolios/${id}`;
@@ -316,7 +425,7 @@ export class PortfolioAPI {
    *
    * @param id - id of the portfolio
    * @param updatePayload -  Object containing updates is unaltered when proxied
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_editportfolio
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_editportfolio
    */
   async editPortfolio(id: string, updatePayload: {name: string}): Promise<CoinbasePortfolio> {
     const resource = `/brokerage/portfolios/${id}`;
@@ -327,7 +436,7 @@ export class PortfolioAPI {
   /**
    * Get Futures Balance Summary
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmbalancesummary
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmbalancesummary
    */
   async getFuturesBalanceSummary(): Promise<FuturesBalanceSummary> {
     const resource = `/brokerage/cfm/balance_summary`;
@@ -338,7 +447,7 @@ export class PortfolioAPI {
   /**
    * List Futures Positions
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmpositions
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmpositions
    */
   async listFuturesPositions(): Promise<FuturesPosition[]> {
     const resource = `/brokerage/cfm/positions`;
@@ -350,7 +459,7 @@ export class PortfolioAPI {
    * Get Futures Position
    *
    * @param id - id of the position
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmposition
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmposition
    */
   async getFuturesPosition(id: string): Promise<FuturesPosition> {
     const resource = `/brokerage/cfm/positions/${id}`;
@@ -362,7 +471,7 @@ export class PortfolioAPI {
    * Schedule Futures Sweep
    *
    * @param data - the sweep data
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_schedulefcmsweep
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_schedulefcmsweep
    */
   async scheduleFuturesSweep(data: {usd_amount: string}): Promise<{success: boolean}> {
     const resource = `/brokerage/cfm/sweeps/schedule`;
@@ -373,7 +482,7 @@ export class PortfolioAPI {
   /**
    * List Futures Sweeps
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getfcmsweeps
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getfcmsweeps
    */
   async listFuturesSweeps(): Promise<FuturesSweep[]> {
     const resource = `/brokerage/cfm/sweeps`;
@@ -384,7 +493,7 @@ export class PortfolioAPI {
   /**
    * Cancel Pending Futures Sweep
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_cancelfcmsweep
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_cancelfcmsweep
    */
   async cancelPendingSweep(): Promise<{success: boolean}> {
     const resource = `/brokerage/cfm/sweeps`;
@@ -396,7 +505,7 @@ export class PortfolioAPI {
    * Allocate Portfolio
    *
    * @param data - aloocation data
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_allocateportfolio
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_allocateportfolio
    */
   async allocatePortfolio(data: AllocatePortfolioPayload): Promise<{}> {
     const resource = `/brokerage/intx/allocate`;
@@ -408,23 +517,21 @@ export class PortfolioAPI {
    * Get Perpetuals Portfolio Summary
    *
    * @param id - The unique identifier for your perpetuals portfolio.
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getintxportfoliosummary
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxportfoliosummary
    */
   async getPerpetualsPortfolioSummary(id: string): Promise<PerpetualsPortfolioSummary> {
     const resource = `/brokerage/intx/portfolio/${id}`;
     const response = await this.apiClient.get(resource);
-    return response.data.summary;
+    return response.data;
   }
 
   /**
    * List Perpetuals Positions
    *
    * @param id -The unique identifier for your perpetuals portfolio.
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getintxpositions
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxpositions
    */
-  async listPerpetualsPositions(
-    id: string
-  ): Promise<{portfolio_summary: PerpetualsPortfolioSummary; positions: PerpetualsPosition[]}> {
+  async listPerpetualsPositions(id: string): Promise<ListPerpetualPositionsResponse> {
     const resource = `/brokerage/intx/positions/${id}`;
     const response = await this.apiClient.get(resource);
     return response.data;
@@ -435,11 +542,68 @@ export class PortfolioAPI {
    *
    * @param id - The unique identifier for your perpetuals portfolio.
    * @param symbol - The product_id for which you want to get the position. e.g. 'BTC-PERP-INTX'
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getintxposition
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxposition
    */
   async getPerpetualsPosition(id: string, symbol: string): Promise<PerpetualsPosition> {
     const resource = `/brokerage/intx/positions/${id}/${symbol}`;
     const response = await this.apiClient.get(resource);
     return response.data.position;
+  }
+
+  /**
+   * Set Intraday Margin Setting
+   *
+   * @param data - request body see IntradayMarginSettingsPayload
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_setintradaymarginsetting/
+   */
+  async setIntradayMarginSetting(data: IntradayMarginSettingsPayload): Promise<{}> {
+    const resource = `/brokerage/cfm/intraday/margin_setting`;
+    const response = await this.apiClient.post(resource, data);
+    return response.data;
+  }
+
+  /**
+   * Get Intraday Margin Setting
+   *
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintradaymarginsetting/
+   */
+  async getIntradayMarginSetting(): Promise<IntradayMarginSettingsPayload> {
+    const resource = `/brokerage/cfm/intraday/margin_setting`;
+    const response = await this.apiClient.get(resource);
+    return response.data;
+  }
+
+  /**
+   * Get Current Margin Window
+   *
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getcurrentmarginwindow/
+   */
+  async getCurrentMarginWindow(): Promise<CurrentMarginWindowInfo> {
+    const resource = `brokerage/cfm/intraday/current_margin_window`;
+    const response = await this.apiClient.get(resource);
+    return response.data;
+  }
+
+  /**
+   * Get Portfolio Balances
+   *
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxbalances/
+   */
+  async getPortfolioBalance(portfolioId: string): Promise<PortfolioBalanceResponse> {
+    const resource = `brokerage/intx/balances/${portfolioId}`;
+    const response = await this.apiClient.get(resource);
+    return response.data;
+  }
+
+  /**
+   * Opt In or Out of Multi Asset Collateral
+   *
+   * @param data - request body see SetMultiAssetCollateralPayload
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_intxmultiassetcollateral/
+   */
+  async setMultiAssetCollateral(data: SetMultiAssetCollateralPayload): Promise<SetMultiAssetCollateralResponse> {
+    const resource = `/brokerage/intx/multi_asset_collateral`;
+    const response = await this.apiClient.post(resource, data);
+    return response.data;
   }
 }

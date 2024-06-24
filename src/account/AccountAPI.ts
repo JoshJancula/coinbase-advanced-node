@@ -1,6 +1,6 @@
 import {AxiosInstance} from 'axios';
 import {ISO_8601_MS_UTC, PaginatedData, Pagination} from '../payload/common';
-import {formatPaginationIntoParams} from '../util/shared-request';
+import {formatPaginationFromResponse, formatPaginationIntoParams} from '../util/shared-request';
 
 export interface SIWCAvailableBalance {
   amount: string;
@@ -31,6 +31,7 @@ export interface Account {
   hold: AccountHold;
   name: string;
   ready: boolean;
+  retail_portfolio_id?: string;
   type: AdvanceAccountTypes;
   updated_at: ISO_8601_MS_UTC;
   uuid: string;
@@ -95,7 +96,7 @@ export class AccountAPI {
    * Get information for a single account.
    *
    * @param accountId - Account ID is the Account.uuid
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getaccount
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getaccount
    */
   async getAccount(accountId: string): Promise<Account> {
     const resource = `${AccountAPI.URL.ACCOUNTS}/${accountId}`;
@@ -107,7 +108,7 @@ export class AccountAPI {
    * Get information for a single account. API key must belong to the same profile as the account.
    *
    * @param accountId - Account ID is either Account.uuid || Account.currency || CoinbaseAccoount.currency.code
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-accounts#http-request-1
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-accounts/#show-account
    */
   async getCoinbaseAccount(accountId: string): Promise<CoinbaseAccount> {
     const resource = `${AccountAPI.URL.COINBASE_ACCOUNT}/${accountId}`;
@@ -118,7 +119,7 @@ export class AccountAPI {
   /**
    * Get a list of trading accounts from the profile of the API key.
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getaccounts
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getaccounts
    */
   async listAccounts(pagination?: Pagination): Promise<PaginatedData<Account>> {
     const resource = AccountAPI.URL.ACCOUNTS;
@@ -126,22 +127,16 @@ export class AccountAPI {
       pagination = formatPaginationIntoParams(pagination);
     }
     const response = await this.apiClient.get(resource, {params: {limit: 250, ...pagination}});
-    const position =
-      response.data.cursor && response.data.cursor !== '' ? response.data.cursor : response.data.accounts.length;
     return {
       data: response.data.accounts,
-      pagination: {
-        after: (Number(position) - response.data.accounts.length).toString(),
-        before: position.toString(),
-        has_next: response.data.has_next || false,
-      },
+      pagination: formatPaginationFromResponse(response),
     };
   }
 
   /**
    * Get a list of your coinbase accounts.
    *
-   * @see https://docs.cloud.coinbase.com/exchange/reference/exchangerestapi_getcoinbaseaccounts
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-accounts/#list-accounts
    */
   async listCoinbaseAccounts(pagination?: Pagination): Promise<PaginatedData<CoinbaseAccount>> {
     const resource = AccountAPI.URL.COINBASE_ACCOUNT;
@@ -151,11 +146,7 @@ export class AccountAPI {
     const response = await this.apiClient.get(resource, {params: {limit: 250, ...pagination}});
     return {
       data: response.data.data,
-      pagination: {
-        after: response.data.pagination.starting_after,
-        before: response.data.pagination.ending_before,
-        has_next: response.data.has_next || false,
-      },
+      pagination: formatPaginationFromResponse(response),
     };
   }
 }

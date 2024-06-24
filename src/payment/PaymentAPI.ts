@@ -26,7 +26,7 @@ export class PaymentAPI {
    * List Payment Methods.
    * Get a list of payment methods for the current user.
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getpaymentmethods
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpaymentmethods
    */
   async listPaymentMethods(): Promise<PaymentMethod[]> {
     const resource = PaymentAPI.URL.PAYMENTS;
@@ -38,7 +38,7 @@ export class PaymentAPI {
    * Get Payment Method
    * @param id - Payment method ID
    *
-   * @see https://docs.cloud.coinbase.com/advanced-trade-api/reference/retailbrokerageapi_getpaymentmethod
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getpaymentmethod
    */
   async getPaymentMethod(id: string): Promise<PaymentMethod> {
     const resource = `${PaymentAPI.URL.PAYMENTS}/${id}`;

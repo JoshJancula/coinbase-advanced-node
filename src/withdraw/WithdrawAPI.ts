@@ -73,7 +73,7 @@ export interface WithdrawalInformation extends BasicTransactionInformation {
 }
 
 /**
- * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-payment-methods#payment-method-resource
+ * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-payment-methods#payment-method-resource
  */
 export interface PaymentMethod {
   allow_buy: boolean;
@@ -124,7 +124,7 @@ export class WithdrawAPI {
    *
    * @param account - account id the deposit was to
    * @param pagination - Pagination field
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-withdrawals#list-withdrawals
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-withdrawals#list-withdrawals
    */
   async listWithdrawals(account: string, pagination?: Pagination): Promise<PaginatedData<WithdrawalInformation>> {
     return this.sharedService.queryAll<WithdrawalInformation>(account, pagination);
@@ -135,7 +135,7 @@ export class WithdrawAPI {
    *
    * @param accountId - id of the account
    * @param withdrawalId - id of the requested resource
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-withdrawals#show-a-withdrawal
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-withdrawals#show-a-withdrawal
    */
   async getWithdrawal(accountId: string, withdrawalId: string): Promise<WithdrawalInformation> {
     return this.sharedService.getById<WithdrawalInformation>(accountId, withdrawalId);
@@ -149,7 +149,7 @@ export class WithdrawAPI {
    * @param paymentMethodId - ID of the payment method
    * @param accountId - The account to withdraw from
    * @param commit - Commit this transaction (default is true)
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-withdrawals#withdraw-funds
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-withdrawals#withdraw-funds
    */
   async withdrawToPaymentMethod(
     amount: string,
@@ -173,7 +173,7 @@ export class WithdrawAPI {
    *
    * @param accountId - The account withdrawal is pulling from
    * @param withdrawalId - The id of the transaction
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-withdrawals#commit-a-withdrawal
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-withdrawals#commit-a-withdrawal
    */
   async commitWithdrawal(accountId: string, withdrawalId: string): Promise<WithdrawalInformation> {
     return this.sharedService.commitPending<WithdrawalInformation>(accountId, withdrawalId);
@@ -182,7 +182,7 @@ export class WithdrawAPI {
   /**
    * Get a list of your payment methods.
    *
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-payment-methods#http-request
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-payment-methods#http-request
    */
   async getPaymentMethods(): Promise<PaymentMethod[]> {
     const resource = WithdrawAPI.URL.LIST_PAYMENT_METHODS;

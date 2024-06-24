@@ -40,7 +40,7 @@ export class TransactionAPI {
    *
    * @param accountID - can use account.uuid or currency symbol... ex BTC || ETh
    * @param pagination - Pagination field
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-transactions#list-transactions
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-transactions#list-transactions
    */
   async listTransactions(accountID: string, params?: Pagination): Promise<PaginatedData<TransactionInformation>> {
     return this.sharedService.queryAll<TransactionInformation>(accountID, params);
@@ -51,7 +51,7 @@ export class TransactionAPI {
    *
    * @param accountID - can use account.uuid or currency symbol... ex BTC || ETh
    * @param transactionId - id of the requested resource
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-transactions#show-a-transaction
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-transactions#show-a-transaction
    */
   async getTransaction(accountID: string, transactionId: string): Promise<TransactionInformation> {
     return this.sharedService.getById<TransactionInformation>(accountID, transactionId);
@@ -62,7 +62,7 @@ export class TransactionAPI {
    *
    * @param accountID - account you're sending $ out of
    * @param info - information of the transaction
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-transactions#http-request-2
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-transactions#http-request-2
    */
   async sendTransaction(accountID: string, info: NewTransaction): Promise<TransactionInformation> {
     const resource = `/accounts/${accountID}/transactions`;
@@ -75,7 +75,7 @@ export class TransactionAPI {
    *
    * @param accountID - account you're sending $ out of
    * @param info - information of the transaction
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-transactions#transfer-money-between-accounts
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-transactions#transfer-money-between-accounts
    */
   async transferFunds(accountID: string, info: InternalTransfer): Promise<TransactionInformation> {
     const resource = `/accounts/${accountID}/transactions`;

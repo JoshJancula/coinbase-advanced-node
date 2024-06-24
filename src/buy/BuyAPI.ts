@@ -44,7 +44,7 @@ export class BuyAPI {
    *
    * @param account - account id of the purchase
    * @param pagination - Pagination field
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-buys#list-buys
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-buys#list-buys
    */
   async listBuys(account: string, pagination?: Pagination): Promise<PaginatedData<BuyInformation>> {
     return this.sharedService.queryAll<BuyInformation>(account, pagination);
@@ -65,7 +65,7 @@ export class BuyAPI {
    * Place buy order
    *
    * @param data - Information for this buy
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-buys#place-buy-order
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-buys#place-buy-order
    */
   async createBuy(data: SIWCOrder): Promise<BuyInformation> {
     return this.sharedService.createNew<BuyInformation>(data);
@@ -76,7 +76,7 @@ export class BuyAPI {
    *
    * @param accountId - The account withdrawal is pulling from
    * @param buyId - The id of the transaction
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-buys#commit-a-buy
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-buys#commit-a-buy
    */
   async commitBuy(accountId: string, buyId: string): Promise<BuyInformation> {
     return this.sharedService.commitPending<BuyInformation>(accountId, buyId);

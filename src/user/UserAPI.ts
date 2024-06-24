@@ -30,7 +30,7 @@ export class UserAPI {
    *  If current request has a wallet:transactions:send scope, then the response will contain a boolean sends_disabled field that indicates if the user's send functionality has been disabled.
    *
    * @param id - if no id is provided we are fetching user associated to current auth creds
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-users#show-current-user
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-users#show-current-user
    */
   async fetchUserInfo(id?: string): Promise<VerifiedUser> {
     let resource = `${UserAPI.URL.USERS}`;
@@ -44,7 +44,7 @@ export class UserAPI {
   /**
    * Get current user's authorization information including granted scopes and send limits when using OAuth2 authentication.
    *
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-users#show-authorization-information
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-users#show-authorization-information
    */
   async fetchAuthorizationInfo(): Promise<UserAuthorizationInfo> {
     const resource = `${UserAPI.URL.USERS}/auth`;

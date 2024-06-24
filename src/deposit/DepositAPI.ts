@@ -45,7 +45,7 @@ export class DepositAPI {
    *
    * @param account - account id the deposit was to
    * @param pagination - Pagination field
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-deposits
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-deposits
    */
   async getDeposits(account: string, pagination?: Pagination): Promise<PaginatedData<DepositInformation>> {
     return this.sharedService.queryAll<DepositInformation>(account, pagination);
@@ -66,7 +66,7 @@ export class DepositAPI {
    * Deposit funds to a payment method.
    *
    * @param data - Information for this deposit
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-deposits#deposit-funds
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-deposits#deposit-funds
    */
   async depositFunds(data: NewFiatTransaction): Promise<DepositInformation> {
     return this.sharedService.createNew<DepositInformation>(data);
@@ -77,7 +77,7 @@ export class DepositAPI {
    *
    * @param accountId - The account withdrawal is pulling from
    * @param depositId - The id of the transaction
-   * @see https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-deposits#commit-a-deposit
+   * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-deposits#commit-a-deposit
    */
   async commitDeposit(accountId: string, depositId: string): Promise<DepositInformation> {
     return this.sharedService.commitPending<DepositInformation>(accountId, depositId);
