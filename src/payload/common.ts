@@ -23,10 +23,12 @@ export enum TransactionStatus {
 
 /** @see https://docs.cloud.coinbase.com/exchange/docs/pagination */
 export interface Pagination {
-  /** Request page after (older) this pagination id. */
+  /** Request page after (older) this pagination id. (this is 'cursor' on Advance Trade calls) */
   after?: string;
   /** Request page before (newer) this pagination id. Only supported on SIWC calls */
   before?: string;
+  /** 'cursor' and 'after' are interchangeable */
+  cursor?: string;
   /** Number of results per request. Maximum 100. Default 100. */
   limit?: number;
 }
@@ -40,15 +42,38 @@ export interface TimeBasedPagination {
   start?: UNIX_STAMP;
 }
 
+export interface SIWCPagination {
+  /** before is only supported on siwc calls */
+  ending_before?: string;
+  has_next?: boolean;
+  /** These are only supported on SIWC calls */
+  limit?: number;
+  next_uri?: string;
+  order?: 'asc' | 'desc';
+  previous_uri?: string;
+  /** Users can use this string to pass in the next call to this endpoint, and repeat this process to fetch through pagination. */
+  starting_after?: string;
+}
+
+export interface LegacyPagination {
+  /** Users can use this string to pass in the next call to this endpoint, and repeat this process to fetch through pagination. This uses the 'cursor' on Advance Trade calls */
+  after?: string;
+  /** before is only supported on siwc calls */
+  before?: string;
+  has_next?: boolean;
+}
+
+export type UniversalPagination = LegacyPagination & SIWCPagination & AdvanceTradePagination;
+
+export interface AdvanceTradePagination {
+  /** Cursor for paginating. Users can use this string to pass in the next call to this endpoint, and repeat this process to fetch all accounts through pagination */
+  cursor?: string;
+  size?: number;
+}
+
 export interface PaginatedData<PayloadType> {
   data: PayloadType[];
-  pagination: {
-    /** Users can use this string to pass in the next call to this endpoint, and repeat this process to fetch through pagination. */
-    after?: string;
-    /** before is only supported on siwc calls */
-    before?: string;
-    has_next?: boolean;
-  };
+  pagination: UniversalPagination;
 }
 
 /** I'm not fond of how coinbase flips between this Amount & Balance schema but it is what it is */

@@ -1,5 +1,6 @@
 import {AxiosError, AxiosInstance} from 'axios';
 import {ISO_8601_MS_UTC, OrderSide, PaginatedData} from '../payload';
+import {formatPaginationFromResponse} from '../util/shared-request';
 
 export enum OrderType {
   LIMIT = 'LIMIT',
@@ -105,7 +106,7 @@ export interface LimitFillOrKill {
 
 /** This feature is currently in closed beta and may be taken down to resolve issues during testing.
  *  Bracket is an order type available on Coinbase Advanced that allows users to buy/sell with a limit price while mitigating potential losses in volatile markets
- * @see https://docs.cdp.coinbase.com/advanced-trade/docs/changelog#2024-mar-28 
+ * @see https://docs.cdp.coinbase.com/advanced-trade/docs/changelog#2024-mar-28
  *  */
 export interface TriggerBracketGTC {
   trigger_bracket_gtc: {
@@ -369,15 +370,9 @@ export class OrderAPI {
     const response = await this.apiClient.get(`${resource}`, {
       params: query,
     });
-    const position =
-      response.data.cursor && response.data.cursor !== '' ? response.data.cursor : response.data.orders.length;
     return {
       data: response.data.orders,
-      pagination: {
-        after: (Number(position) - response.data.orders.length).toString(),
-        before: position.toString(),
-        has_next: response.data.has_next || false,
-      },
+      pagination: formatPaginationFromResponse(response),
     };
   }
 

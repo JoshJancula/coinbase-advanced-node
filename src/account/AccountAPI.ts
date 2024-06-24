@@ -1,6 +1,6 @@
 import {AxiosInstance} from 'axios';
 import {ISO_8601_MS_UTC, PaginatedData, Pagination} from '../payload/common';
-import {formatPaginationIntoParams} from '../util/shared-request';
+import {formatPaginationFromResponse, formatPaginationIntoParams} from '../util/shared-request';
 
 export interface SIWCAvailableBalance {
   amount: string;
@@ -127,15 +127,9 @@ export class AccountAPI {
       pagination = formatPaginationIntoParams(pagination);
     }
     const response = await this.apiClient.get(resource, {params: {limit: 250, ...pagination}});
-    const position =
-      response.data.cursor && response.data.cursor !== '' ? response.data.cursor : response.data.accounts.length;
     return {
       data: response.data.accounts,
-      pagination: {
-        after: (Number(position) - response.data.accounts.length).toString(),
-        before: position.toString(),
-        has_next: response.data.has_next || false,
-      },
+      pagination: formatPaginationFromResponse(response),
     };
   }
 
@@ -152,11 +146,7 @@ export class AccountAPI {
     const response = await this.apiClient.get(resource, {params: {limit: 250, ...pagination}});
     return {
       data: response.data.data,
-      pagination: {
-        after: response.data.pagination.starting_after,
-        before: response.data.pagination.ending_before,
-        has_next: response.data.has_next || false,
-      },
+      pagination: formatPaginationFromResponse(response),
     };
   }
 }

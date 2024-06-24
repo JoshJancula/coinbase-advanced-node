@@ -11,6 +11,7 @@ import {
 } from '../payload/common';
 import {CandleBucketUtil} from './CandleBucketUtil';
 import {RESTClient} from '..';
+import {formatPaginationFromResponse} from '../util/shared-request';
 
 export interface Product {
   auction_mode: boolean;
@@ -353,11 +354,7 @@ export class ProductAPI {
       best_ask: response.data.best_ask,
       best_bid: response.data.best_bid,
       data: response.data.trades,
-      pagination: {
-        after: '0',
-        before: response.data.num_products,
-        has_next: false,
-      },
+      pagination: formatPaginationFromResponse(response),
     };
   }
 

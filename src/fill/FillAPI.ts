@@ -1,6 +1,6 @@
 import {AxiosInstance} from 'axios';
 import {ISO_8601_MS_UTC, OrderSide, PaginatedData, Pagination, UUID_V4} from '../payload/common';
-import {formatPaginationIntoParams} from '../util/shared-request';
+import {formatPaginationFromResponse, formatPaginationIntoParams} from '../util/shared-request';
 
 export enum Liquidity {
   MAKER = 'M',
@@ -98,15 +98,9 @@ export class FillAPI {
   async getFills(query: FillApiQueryParams): Promise<PaginatedData<Fill>> {
     const resource = FillAPI.URL.FILLS;
     const response = await this.apiClient.get(resource, {params: query});
-    const position =
-      response.data.cursor && response.data.cursor !== '' ? response.data.cursor : response.data.fills.length;
     return {
       data: response.data.fills,
-      pagination: {
-        after: (Number(position) - response.data.fills.length).toString(),
-        before: position.toString(),
-        has_next: response.data.has_next || false,
-      },
+      pagination: formatPaginationFromResponse(response),
     };
   }
 }
