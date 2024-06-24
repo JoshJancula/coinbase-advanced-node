@@ -170,6 +170,39 @@ export interface PerpetualsPortfolioSummary {
   unrealized_pnl: Balance;
 }
 
+export interface PortfolioAssetDetails {
+  account_collateral_limit: string;
+  asset_icon_url: string;
+  asset_id: string;
+  asset_name: string;
+  asset_uuid: string;
+  collateral_weight: string;
+  ecosystem_collateral_limit_breached: boolean;
+  status: string;
+  supported_networks_enabled: boolean;
+}
+
+export interface PortfolioBalance {
+  asset: PortfolioAssetDetails;
+  collateral_value: string;
+  collateral_weight: string;
+  hold: string;
+  loan: string;
+  loan_collateral_requirement_usd: string;
+  max_withdraw_amount: string;
+  pledged_quantity: string;
+  quantity: string;
+  transfer_hold: string;
+}
+
+export interface PortfolioBalanceResponse {
+  portfolio_balances: {
+    balances: PortfolioBalance[];
+    is_margin_limit_reached: boolean;
+    portfolio_uuid: string;
+  };
+}
+
 export interface PerpetualsPosition {
   buy_order_size: string;
   im_contribution: string;
@@ -263,6 +296,15 @@ export interface CurrentMarginWindowInfo {
   is_intraday_margin_enrollment_killswitch_enabled: boolean;
   is_intraday_margin_killswitch_enabled: boolean;
   margin_window: MarginWindow;
+}
+
+export interface SetMultiAssetCollateralPayload {
+  multi_asset_collateral_enabled: boolean;
+  portfolio_uuid: string;
+}
+
+export interface SetMultiAssetCollateralResponse {
+  multi_asset_collateral_enabled: boolean;
 }
 
 export class PortfolioAPI {
@@ -491,6 +533,29 @@ export class PortfolioAPI {
   async getCurrentMarginWindow(): Promise<CurrentMarginWindowInfo> {
     const resource = `brokerage/cfm/intraday/current_margin_window`;
     const response = await this.apiClient.get(resource);
+    return response.data;
+  }
+
+  /**
+   * Get Portfolio Balances
+   *
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintxbalances/
+   */
+  async getPortfolioBalance(portfolioId: string): Promise<PortfolioBalanceResponse> {
+    const resource = `brokerage/intx/balances/${portfolioId}`;
+    const response = await this.apiClient.get(resource);
+    return response.data;
+  }
+
+  /**
+   * Opt In or Out of Multi Asset Collateral
+   *
+   * @param data - request body see SetMultiAssetCollateralPayload
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_intxmultiassetcollateral/
+   */
+  async setMultiAssetCollateral(data: SetMultiAssetCollateralPayload): Promise<SetMultiAssetCollateralResponse> {
+    const resource = `/brokerage/intx/multi_asset_collateral`;
+    const response = await this.apiClient.post(resource, data);
     return response.data;
   }
 }
