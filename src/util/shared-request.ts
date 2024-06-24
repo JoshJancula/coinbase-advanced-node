@@ -36,7 +36,7 @@ export const formatPaginationFromResponse = (response: any): UniversalPagination
     next_uri: response?.data?.pagination?.next_uri || undefined,
     order: response?.data?.pagination?.order || undefined,
     size: response?.data?.size ? Number(response.data.size) : undefined,
-    starting_after: response?.data?.pagination?.starting_after || response.data.cursor || undefined,
+    starting_after: response?.data?.pagination?.starting_after || response?.data?.cursor || undefined,
   };
   return Object.entries(pagination)
     .filter(([_key, value]) => value !== undefined)
