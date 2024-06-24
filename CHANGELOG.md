@@ -1,9 +1,30 @@
+### 4.0.0 (2024-06-24)
+
+##### Chores
+
+*  add null check ([ecd183de](https://github.com/joshjancula/coinbase-advanced-node/commit/ecd183de1831dfd076adf0621b1f07dbd9ec7d21))
+*  updating perpetuals ([6cc0bba9](https://github.com/joshjancula/coinbase-advanced-node/commit/6cc0bba9affc10ecd7fb4d678dc1f1079785d4f5))
+*  update retail_portfolio_id on Account responses ([84283fac](https://github.com/joshjancula/coinbase-advanced-node/commit/84283face97faf15fcc23cec7ceb2bdc0ef14067))
+*  add margin_window_measures to futures balance summary ([46d8ccca](https://github.com/joshjancula/coinbase-advanced-node/commit/46d8ccca30a2907078fe89b1d5a33e7ea7a29db2))
+*  Get Intraday Margin Setting ([446e494d](https://github.com/joshjancula/coinbase-advanced-node/commit/446e494da486d89f9c854cb37ce975110a39b55b))
+*  support intraday margin_setting & current_margin_window ([3edea78e](https://github.com/joshjancula/coinbase-advanced-node/commit/3edea78e4d75c5a0bbfed10262729670ad5ed7e0))
+*  Added get_tradability_status on product apis to populate the view_only field in the response ([0a98ed34](https://github.com/joshjancula/coinbase-advanced-node/commit/0a98ed34bd27104c8bd5d24ee948fd2aa27037e6))
+*  Added retail_portfolio_id to fills params & response ([c72e2aa4](https://github.com/joshjancula/coinbase-advanced-node/commit/c72e2aa435a4a72df824f52fc9a7777591cfb514))
+
+##### New Features
+
+*  universal pagination & ability to isolate per api spec ([f9de0832](https://github.com/joshjancula/coinbase-advanced-node/commit/f9de0832254e674061ec9206c72c3ecfcb389100))
+*  support intx balances &  multi_asset_collateral ([f316e8d0](https://github.com/joshjancula/coinbase-advanced-node/commit/f316e8d03fbcf1136513c223e0e3e82205939063))
+
+##### Other Changes
+
+*  update docs from cb domain swap ([fa5e6711](https://github.com/joshjancula/coinbase-advanced-node/commit/fa5e67116135471ef564d8c0b0f7e997a4ed716c))
+
 ### 3.4.0 (2024-04-18)
 
 ##### Chores
 
 *  support bracket & fok orders, updated typedoc ([49b89891](https://github.com/joshjancula/coinbase-advanced-node/commit/49b89891d50469e5bd650eba30d488fc581442db))
-*  release v3.3.0 ([5839ed7a](https://github.com/joshjancula/coinbase-advanced-node/commit/5839ed7a4157a3494242985ee2c775da4ea5a2bf))
 
 ##### New Features
 
