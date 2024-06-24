@@ -277,7 +277,7 @@ export enum IntradayMarginSettings {
 }
 
 export interface IntradayMarginSettingsPayload {
-  intraday_margin_setting: string;
+  intraday_margin_setting: IntradayMarginSettings;
 }
 
 export enum MarginWindowTypes {
@@ -522,6 +522,17 @@ export class PortfolioAPI {
   async setIntradayMarginSetting(data: IntradayMarginSettingsPayload): Promise<{}> {
     const resource = `/brokerage/cfm/intraday/margin_setting`;
     const response = await this.apiClient.post(resource, data);
+    return response.data;
+  }
+
+  /**
+   * Get Intraday Margin Setting
+   *
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getintradaymarginsetting/
+   */
+  async getIntradayMarginSetting(): Promise<IntradayMarginSettingsPayload> {
+    const resource = `/brokerage/cfm/intraday/margin_setting`;
+    const response = await this.apiClient.get(resource);
     return response.data;
   }
 
