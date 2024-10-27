@@ -38,14 +38,30 @@ export interface Fill {
   user_id: string;
 }
 
+export enum FillSortTypes {
+  PRICE = 'PRICE',
+  TRADE_TIME = 'TRADE_TIME',
+
+}
+
 export interface FillApiQueryParams {
   cursor?: string; // Cursor used for pagination. When provided, the response returns responses after this cursor
   end_sequence_timestamp?: ISO_8601_MS_UTC; // End date. Only fills with a trade time before this start date are returned.
   limit?: number; // Maximum number of fills to return in response. Defaults to 100.
+  /**
+   * @deprecated
+   *  replaced by order_ids. The singular parameter is still supported, but recommend using the plural parameters for future compatibility */
   order_id?: string;
+  order_ids?: string | string[];
+  /**
+   *  @deprecated
+   * replaced by product_ids. The singular parameter is still supported, but recommend using the plural parameters for future compatibility */
   product_id?: string;
+  product_ids?: string | string[];
   retail_portfolio_id?: string;
+  sort_by?: FillSortTypes;
   start_sequence_timestamp?: ISO_8601_MS_UTC;
+  trade_ids?: string | string[];
 }
 
 export class FillAPI {

@@ -182,22 +182,44 @@ export interface CancelOrderResponse {
   success?: boolean;
 }
 
+export enum OrdierListSortTypes {
+  LAST_FILL_TIME = 'LAST_FILL_TIME',
+  LIMIT_PRICE = 'LIMIT_PRICE',
+}
+
 /** @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_gethistoricalorders */
 export interface OrderListQueryParam {
   asset_filters?: string[];
   contract_expiry_type?: string;
   end_date?: ISO_8601_MS_UTC;
   limit?: number;
+  /**
+   * @deprecated
+   *  replaced by order_ids. The singular parameter is still supported, but recommend using the plural parameters for future compatibility */
+  order_id?: string;
+  order_ids?: string | string[];
   order_placement_source?: string;
   order_side?: OrderSide;
-  /** Limit list of orders to these statuses. Passing "all" returns orders of all statuses. Default: [open, pending, active] */
+  /**
+   * Limit list of orders to these statuses. Passing "all" returns orders of all statuses. Default: [open, pending, active]
+   * You cannot query for OPEN orders with other order types.
+   */
   order_status?: (OrderStatus | 'all')[];
+  /**
+   *  @deprecated
+   * replaced by order_types. The singular parameter is still supported, but recommend using the plural parameters for future compatibility */
   order_type?: OrderType;
-  /** Only list orders for a specific product. */
+  order_types?: OrderType | OrderType[];
+  /**
+   *  @deprecated
+   * replaced by product_ids. The singular parameter is still supported, but recommend using the plural parameters for future compatibility */
   product_id?: string;
+  product_ids?: string | string[];
   product_type?: string;
   retail_portfolio_id?: string;
+  sort_by?: OrdierListSortTypes;
   start_date?: ISO_8601_MS_UTC;
+  time_in_forces?: string[];
   user_native_currency?: string;
 }
 export interface Order {
