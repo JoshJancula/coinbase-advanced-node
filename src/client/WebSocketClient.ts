@@ -9,6 +9,7 @@ import {
   OrderSide,
   OrderStatus,
   OrderType,
+  PositionSide,
   RESTClient,
 } from '..';
 import {RequestSetup, SignedRequest} from '../auth/RequestSigner';
@@ -232,8 +233,41 @@ export interface WebsocketUserOrder {
   total_fees: string;
 }
 
+export interface WebosocketUserPerpetualsFuturePosition {
+  aggregated_pnl: string;
+  buy_order_size: string;
+  entry_vwap: string;
+  im_notional: string;
+  leverage: string;
+  liquidation_price: string;
+  margin_type: 'Cross' | 'Isolated';
+  mark_price: string;
+  mm_notional: string;
+  net_size: string;
+  portfolio_uuid: string;
+  position_notional: string;
+  position_side: PositionSide;
+  product_id: string;
+  sell_order_size: string;
+  unrealized_pnl: string;
+  vwap: string;
+}
+
+export interface WebsocketExpiringFuturePosition {
+  entry_price: string;
+  number_of_contracts: string;
+  product_id: string;
+  realized_pnl: string;
+  side: PositionSide;
+  unrealized_pnl: string;
+}
+
 export interface WebsocketUserMessageEvent {
-  orders: WebsocketUserOrder[];
+  orders?: WebsocketUserOrder[];
+  positions?: {
+    expiring_futures_positions?: WebsocketExpiringFuturePosition[];
+    perpetual_futures_positions?: WebosocketUserPerpetualsFuturePosition[];
+  };
   type: MessageEventType;
 }
 

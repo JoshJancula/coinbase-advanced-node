@@ -41,7 +41,6 @@ export interface Fill {
 export enum FillSortTypes {
   PRICE = 'PRICE',
   TRADE_TIME = 'TRADE_TIME',
-
 }
 
 export interface FillApiQueryParams {
