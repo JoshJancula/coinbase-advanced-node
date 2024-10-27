@@ -163,6 +163,20 @@ npx ts-node ./src/demo/dump-candles.ts
 
 **Tip:** There is a [.env.defaults](https://github.com/joshjancula/coinbase-advanced-node/blob/main/.env.defaults) file which serves as a template. Just remove its `.defaults` extension and enter your credentials to get started. Do not commit this file (or your credentials) to any repository!
 
+### Sandbox
+Coinbase does offer a `limited` sandbox for testing, you can connect to it using the snippet below.
+For more information [visit](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-sandbox)
+```ts
+const client = new Coinbase({
+      advTradeHttpUrl: 'https://api-sandbox.coinbase.com/api/v3',
+      apiKey: null,
+      apiSecret: null,
+    });
+
+const orders = await client.rest.order.getOrders();
+console.log('sandbox orders ', orders);
+```
+
 ### Web Frontend Applications
 
 The "coinbase-advanced-node" library was built to be used in Node.js environments BUT you can also make use of it in web frontend applications (using React, Vue.js, etc.). However, due to the [CORS restrictions](https://developer.mozilla.org/docs/Web/HTTP/CORS) of modern web browser, you will have to use a proxy server.
