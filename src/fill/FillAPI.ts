@@ -27,6 +27,7 @@ export interface Fill {
   order_id: UUID_V4;
   price: string;
   product_id: string;
+  /** @deprecated */
   retail_portfolio_id?: string;
   sequence_timestamp: ISO_8601_MS_UTC;
   side: OrderSide;
@@ -57,6 +58,7 @@ export interface FillApiQueryParams {
    * replaced by product_ids. The singular parameter is still supported, but recommend using the plural parameters for future compatibility */
   product_id?: string;
   product_ids?: string | string[];
+  /** @deprecated */
   retail_portfolio_id?: string;
   sort_by?: FillSortTypes;
   start_sequence_timestamp?: ISO_8601_MS_UTC;

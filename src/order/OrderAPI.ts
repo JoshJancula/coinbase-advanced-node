@@ -146,6 +146,7 @@ export interface NewOrder {
   margin_type?: OrderMarginTypes;
   order_configuration: OrderConfiguration;
   product_id: string;
+  /** @deprecated */
   retail_portfolio_id?: string;
   self_trade_prevention_id?: string;
   side: OrderSide;
@@ -216,6 +217,7 @@ export interface OrderListQueryParam {
   product_id?: string;
   product_ids?: string | string[];
   product_type?: string;
+  /** @deprecated */
   retail_portfolio_id?: string;
   sort_by?: OrdierListSortTypes;
   start_date?: ISO_8601_MS_UTC;
