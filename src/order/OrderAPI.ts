@@ -263,9 +263,7 @@ export interface CreateOrderResponse {
     new_order_failure_reason: string;
     preview_failure_reason: string;
   };
-  failure_reason?: string;
   order_configuration?: OrderConfiguration;
-  order_id: string;
   success: boolean;
   success_response?: {
     client_order_id: string;
