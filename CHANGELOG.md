@@ -1,3 +1,26 @@
+### 4.1.0 (2024-10-28)
+
+##### Chores
+
+*  Deprecated failure_reason and (top-level) order_id from Create Order. ([62cae248](https://github.com/joshjancula/coinbase-advanced-node/commit/62cae248d9d427730fc93bfa3cc9addb0c348366))
+*  Deprecated the retail_portfolio_id field for CDP keys, legacy keys unaffected ([2fa920e9](https://github.com/joshjancula/coinbase-advanced-node/commit/2fa920e9804b0f1c5169e13004568fe3b6d6e8ae))
+*  new user endpoint for info  about your CDP API key permissions ([9bd00eda](https://github.com/joshjancula/coinbase-advanced-node/commit/9bd00eda324bd6680a2a884dedbbf012a0a0b55a))
+*  add perpetual futures and expiring futures positions info on user ws ([232670af](https://github.com/joshjancula/coinbase-advanced-node/commit/232670af4e9bf95213ad5218288e9704981e9436))
+*  support plural params & mark singular for deprecation ([f5baa683](https://github.com/joshjancula/coinbase-advanced-node/commit/f5baa6831e1e1bbdb048485731b6f4cb0c2361bc))
+
+##### New Features
+
+*  Added Futures Balance Summary WebSocket channel for client connections ([d4d7c620](https://github.com/joshjancula/coinbase-advanced-node/commit/d4d7c62033ce6196a8a128763baa3e5ac1d7ceda))
+
+##### Bug Fixes
+
+*  unit test in order ([412f3ef2](https://github.com/joshjancula/coinbase-advanced-node/commit/412f3ef2f4a1341712412d5ddab5596c264f84cf))
+
+##### Other Changes
+
+*  Sign In With Coinbase (SIWC) is now Coinbase App ([5f518439](https://github.com/joshjancula/coinbase-advanced-node/commit/5f5184390d0273d0db2d68bc6f5447c9c72f21cb))
+*  update docs for sandbox ([66f5e50c](https://github.com/joshjancula/coinbase-advanced-node/commit/66f5e50c17a7949538fa3c863722ba20b5117562))
+
 ### 4.0.0 (2024-06-24)
 
 ##### Chores
