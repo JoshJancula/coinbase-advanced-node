@@ -1,6 +1,6 @@
 # Coinbase API
 
-Unofficial Coinbase API for Node.js, written in TypeScript and covered by tests. Covers both the [Advanced Trade API](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) & [Sign In With Coinbase API](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/welcome)
+Unofficial Coinbase API for Node.js, written in TypeScript and covered by tests. Covers both the [Advanced Trade API](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) & [Coinbase App API (Formerly Sign In With Coinbase)](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/welcome)
 
 ## Motivation
 
@@ -58,7 +58,7 @@ The [demo section](#demos) provides many examples on how to use "coinbase-advanc
 
 All authentication methods require that you obtain correct permissions (scopes) to access different API endpoints. Read more about scopes [here](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/scopes)
 
-For [Advanced Trade](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) orders, use the `order` API. The `buy` & `sell` API's exposed are part of the [Sign In With Coinbase API](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/welcome) which have different capabilities and fee structures
+For [Advanced Trade](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) orders, use the `order` API. The `buy` & `sell` API's exposed are part of the [Coinbase App API (Sign In With Coinbase)](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/welcome) which have different capabilities and fee structures
 
 ### REST Example
 
@@ -162,6 +162,20 @@ npx ts-node ./src/demo/dump-candles.ts
 ```
 
 **Tip:** There is a [.env.defaults](https://github.com/joshjancula/coinbase-advanced-node/blob/main/.env.defaults) file which serves as a template. Just remove its `.defaults` extension and enter your credentials to get started. Do not commit this file (or your credentials) to any repository!
+
+### Sandbox
+Coinbase does offer a `limited` sandbox for testing, you can connect to it using the snippet below.
+For more information [visit](https://docs.cdp.coinbase.com/advanced-trade/docs/rest-api-sandbox)
+```ts
+const client = new Coinbase({
+      advTradeHttpUrl: 'https://api-sandbox.coinbase.com/api/v3',
+      apiKey: null,
+      apiSecret: null,
+    });
+
+const orders = await client.rest.order.getOrders();
+console.log('sandbox orders ', orders);
+```
 
 ### Web Frontend Applications
 

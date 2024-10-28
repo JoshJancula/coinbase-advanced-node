@@ -9,6 +9,7 @@ import {
   OrderSide,
   OrderStatus,
   OrderType,
+  PositionSide,
   RESTClient,
 } from '..';
 import {RequestSetup, SignedRequest} from '../auth/RequestSigner';
@@ -29,6 +30,7 @@ export interface WebsocketResponseData {
     | WebsocketHeartBeatMessageEvent[]
     | WebsocketUserMessageEvent[]
     | WebsocketCandlesMessageEvent[]
+    | WebsocketFcmBalanceSummaryMessageEvent[]
     | WebSocketSubscriptionEvent[];
   sequence_num: number;
   timestamp: ISO_8601_MS_UTC;
@@ -37,6 +39,8 @@ export interface WebsocketResponseData {
 export enum WebSocketChannelName {
   /** Subscribe to the candles channel to receive candles messages for specific products with updates every second. Candles are grouped into buckets (granularities) of five minutes. */
   CANDLES = 'candles',
+  /** sends updates on all of a user's futures balances, including all subsequent updates of those balances. */
+  FUTURES_BALANCE_SUMMARY = 'futures_balance_summary',
   /** Real-time server pings to keep all connections open */
   HEARTBEAT = 'heartbeats',
   /** The easiest way to keep a snapshot of the order book is to use the level2 channel. It guarantees delivery of all updates, which reduce a lot of the overhead required when consuming the full channel. */
@@ -68,6 +72,8 @@ export enum WebSocketResponseType {
   CANDLES = 'candles',
   /** Most failure cases will cause an error message (a message with the type "error") to be emitted. */
   ERROR = 'error',
+  /**  sends updates on all of a user's futures balances, including all subsequent updates of those balances. */
+  FUTURES_BALANCE_SUMMARY = 'futures_balance_summary',
   /** Subscribing to the heartbeats channel, alongside other channels, ensures that all subscriptions stay open when updates are sparse. This is useful, for example, when fetching market data for illiquid pairs. */
   HEARTBEAT = 'heartbeats',
   /** When subscribing to the 'level2' channel it will send an initial snapshot message with the corresponding product ids, bids and asks to represent the entire order book. */
@@ -216,6 +222,54 @@ export interface WebsocketCandlesMessage extends WebsocketResponseData {
   type: WebSocketResponseType.CANDLES;
 }
 
+export enum MarginWindowTypesWS {
+  FCM_MARGIN_WINDOW_TYPE_INTRADAY = 'FCM_MARGIN_WINDOW_TYPE_INTRADAY',
+  FCM_MARGIN_WINDOW_TYPE_OVERNIGHT = 'FCM_MARGIN_WINDOW_TYPE_OVERNIGHT',
+  FCM_MARGIN_WINDOW_TYPE_TRANSITION = 'FCM_MARGIN_WINDOW_TYPE_TRANSITION',
+  FCM_MARGIN_WINDOW_TYPE_UNSPECIFIED = 'FCM_MARGIN_WINDOW_TYPE_UNSPECIFIED',
+  FCM_MARGIN_WINDOW_TYPE_WEEKEND = 'FCM_MARGIN_WINDOW_TYPE_WEEKEND',
+}
+
+export enum MarginWindowLevelsWS {
+  MARGIN_LEVEL_TYPE_BASE = 'MARGIN_LEVEL_TYPE_BASE',
+  MARGIN_LEVEL_TYPE_DANGER = 'MARGIN_LEVEL_TYPE_DANGER',
+  MARGIN_LEVEL_TYPE_LIQUIDATION = 'MARGIN_LEVEL_TYPE_LIQUIDATION',
+  MARGIN_LEVEL_TYPE_UNSPECIFIED = 'MARGIN_LEVEL_TYPE_UNSPECIFIED',
+  MARGIN_LEVEL_TYPE_WARNING = 'MARGIN_LEVEL_TYPE_WARNING',
+}
+
+export interface MarginWindowMeasureWS {
+  futures_buying_power: string;
+  initial_margin: string;
+  liquidation_buffer_percentage: string;
+  maintenance_margin: string;
+  margin_level: MarginWindowLevelsWS;
+  margin_window_type: MarginWindowTypesWS;
+  total_hold: string;
+}
+
+export interface WebsocketFcmBalanceSummaryMessageEvent {
+  available_margin: string;
+  cbi_usd_balance: string;
+  cfm_usd_balance: string;
+  daily_realized_pnl: string;
+  futures_buying_power: string;
+  initial_margin: string;
+  intraday_margin_window_measure: MarginWindowMeasureWS;
+  liquidation_buffer_amount: string;
+  liquidation_buffer_percentage: string;
+  liquidation_threshold: string;
+  overnight_margin_window_measure: MarginWindowMeasureWS;
+  total_open_orders_hold_amount: string;
+  total_usd_balance: string;
+  unrealized_pnl: string;
+}
+
+export interface WebsocketFuturesBalanceMessage extends WebsocketResponseData {
+  events: WebsocketFcmBalanceSummaryMessageEvent[];
+  type: WebSocketResponseType.FUTURES_BALANCE_SUMMARY;
+}
+
 export interface WebsocketUserOrder {
   avg_price: string;
   client_order_id: string;
@@ -232,8 +286,41 @@ export interface WebsocketUserOrder {
   total_fees: string;
 }
 
+export interface WebosocketUserPerpetualsFuturePosition {
+  aggregated_pnl: string;
+  buy_order_size: string;
+  entry_vwap: string;
+  im_notional: string;
+  leverage: string;
+  liquidation_price: string;
+  margin_type: 'Cross' | 'Isolated';
+  mark_price: string;
+  mm_notional: string;
+  net_size: string;
+  portfolio_uuid: string;
+  position_notional: string;
+  position_side: PositionSide;
+  product_id: string;
+  sell_order_size: string;
+  unrealized_pnl: string;
+  vwap: string;
+}
+
+export interface WebsocketExpiringFuturePosition {
+  entry_price: string;
+  number_of_contracts: string;
+  product_id: string;
+  realized_pnl: string;
+  side: PositionSide;
+  unrealized_pnl: string;
+}
+
 export interface WebsocketUserMessageEvent {
-  orders: WebsocketUserOrder[];
+  orders?: WebsocketUserOrder[];
+  positions?: {
+    expiring_futures_positions?: WebsocketExpiringFuturePosition[];
+    perpetual_futures_positions?: WebosocketUserPerpetualsFuturePosition[];
+  };
   type: MessageEventType;
 }
 
@@ -255,6 +342,7 @@ export interface WebsocketHeartbeatMessage extends WebsocketResponseData {
 export enum WebSocketEvent {
   ON_CLOSE = 'WebSocketEvent.ON_CLOSE',
   ON_ERROR = 'WebSocketEvent.ON_ERROR',
+  ON_FUTURES_BALANCE = 'WebSocketEvent.ON_FUTURES_BALANCE',
   ON_MESSAGE = 'WebSocketEvent.ON_MESSAGE',
   ON_MESSAGE_CANDLES = 'WebSocketEvent.ON_MESSAGE_CANDLES',
   ON_MESSAGE_ERROR = 'WebSocketEvent.ON_MESSAGE_ERROR',
@@ -297,6 +385,8 @@ export interface WebSocketClient {
   on(event: WebSocketEvent.ON_USER_UPDATE, listener: (userMessage: WebsocketUserMessage) => void): this;
 
   on(event: WebSocketEvent.ON_OPEN, listener: (event: Event) => void): this;
+
+  on(event: WebSocketEvent.ON_FUTURES_BALANCE, listener: (summary: WebsocketFuturesBalanceMessage) => void): this;
 }
 
 // eslint-disable-next-line no-redeclare
@@ -415,6 +505,10 @@ export class WebSocketClient extends EventEmitter {
         case WebSocketChannelName.MARKET_TRADES:
           data.type = WebSocketResponseType.MARKET_TRADES;
           this.emit(WebSocketEvent.ON_MESSAGE_MARKET_TRADES, data);
+          break;
+        case WebSocketChannelName.FUTURES_BALANCE_SUMMARY:
+          data.type = WebSocketResponseType.FUTURES_BALANCE_SUMMARY;
+          this.emit(WebSocketEvent.ON_FUTURES_BALANCE, data);
           break;
         case WebSocketChannelName.USER:
           data.type = WebSocketResponseType.USER;

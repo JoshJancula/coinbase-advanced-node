@@ -23,11 +23,10 @@ describe('OrderAPI', () => {
                   quote_size: '10.00',
                 },
               },
-              order_id: '089797696987-97687687-96867576576',
               success: true,
               success_response: {
                 client_order_id: newOrder.client_order_id,
-                order_id: '089797696987-97687687-968675765760',
+                order_id: '089797696987-97687687-96867576576',
                 product_id: 'BTC-USD',
                 side: 'BUY',
               },
@@ -48,7 +47,7 @@ describe('OrderAPI', () => {
         side: OrderSide.BUY,
       });
 
-      expect(placedOrder.order_id).toBe('089797696987-97687687-96867576576');
+      expect(placedOrder.success_response?.order_id).toBe('089797696987-97687687-96867576576');
       expect(placedOrder.success).toBe(true);
     });
   });

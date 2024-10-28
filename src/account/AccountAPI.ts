@@ -31,6 +31,7 @@ export interface Account {
   hold: AccountHold;
   name: string;
   ready: boolean;
+  /** @deprecated */
   retail_portfolio_id?: string;
   type: AdvanceAccountTypes;
   updated_at: ISO_8601_MS_UTC;

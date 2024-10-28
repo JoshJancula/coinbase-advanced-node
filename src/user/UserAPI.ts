@@ -1,4 +1,5 @@
 import {AxiosInstance} from 'axios';
+import {UUID_V4} from '../payload';
 
 export interface VerifiedUser {
   avatar_url: string;
@@ -18,8 +19,17 @@ export interface UserAuthorizationInfo {
   scopes: string[];
 }
 
+export interface CurrentApiKeyPermissions {
+  can_trade: boolean;
+  can_transfer: boolean;
+  can_view: boolean;
+  portfolio_type: 'UNDEFINED' | 'DEFAULT' | 'CONSUMER' | 'INTX';
+  portfolio_uuid: UUID_V4;
+}
+
 export class UserAPI {
-  static readonly URL: {USERS: string} = {
+  static readonly URL: {API_KEYS: string; USERS: string} = {
+    API_KEYS: '/brokerage/key_permissions',
     USERS: `/user`,
   };
 
@@ -42,6 +52,7 @@ export class UserAPI {
   }
 
   /**
+   * @deprecated
    * Get current user's authorization information including granted scopes and send limits when using OAuth2 authentication.
    *
    * @see https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/api-users#show-authorization-information
@@ -50,5 +61,15 @@ export class UserAPI {
     const resource = `${UserAPI.URL.USERS}/auth`;
     const response = await this.apiClient.get<any>(resource);
     return response.data.data;
+  }
+
+  /**
+   * Get information about your CDP API key permissions
+   *
+   * @see https://docs.cdp.coinbase.com/advanced-trade/reference/retailbrokerageapi_getapikeypermissions
+   */
+  async getApiKeyPermissions(): Promise<CurrentApiKeyPermissions> {
+    const response = await this.apiClient.get<any>(UserAPI.URL.API_KEYS);
+    return response.data;
   }
 }
