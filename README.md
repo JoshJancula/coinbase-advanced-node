@@ -1,6 +1,6 @@
 # Coinbase API
 
-Unofficial Coinbase API for Node.js, written in TypeScript and covered by tests. Covers both the [Advanced Trade API](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) & [Sign In With Coinbase API](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/welcome)
+Unofficial Coinbase API for Node.js, written in TypeScript and covered by tests. Covers both the [Advanced Trade API](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) & [Coinbase App API (Formerly Sign In With Coinbase)](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/welcome)
 
 ## Motivation
 
@@ -58,7 +58,7 @@ The [demo section](#demos) provides many examples on how to use "coinbase-advanc
 
 All authentication methods require that you obtain correct permissions (scopes) to access different API endpoints. Read more about scopes [here](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/scopes)
 
-For [Advanced Trade](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) orders, use the `order` API. The `buy` & `sell` API's exposed are part of the [Sign In With Coinbase API](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/welcome) which have different capabilities and fee structures
+For [Advanced Trade](https://docs.cdp.coinbase.com/advanced-trade/docs/welcome) orders, use the `order` API. The `buy` & `sell` API's exposed are part of the [Coinbase App API (Sign In With Coinbase)](https://docs.cdp.coinbase.com/sign-in-with-coinbase/docs/welcome) which have different capabilities and fee structures
 
 ### REST Example
 
